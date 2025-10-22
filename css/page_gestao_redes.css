@@ -1,0 +1,274 @@
+/* Header específico para página gestão de redes - usando header-pages.css */
+
+/* Estilos para a página de Gestão de Redes Sociais */
+
+body {
+  background-color: var(--color-white);
+  color: var(--color-dark-gray);
+  font-family: var(--font-inter), sans-serif;
+}
+
+.gestao-section {
+  padding: 120px 0 80px;
+}
+
+/* Título */
+.gestao-title-container {
+  margin-bottom: 50px;
+  display: inline-block;
+}
+
+.gestao-title {
+  font-size: 2.5rem;
+  color: var(--color-dark-gray);
+  font-weight: 400;
+  line-height: 1.2;
+  display: inline-block;
+  position: relative;
+  padding-right: 20px;
+}
+
+.gestao-title-espaço {
+  word-spacing: 4.5rem;
+}
+
+/* Tipos de gestão */
+.gestao-tipos-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-bottom: 50px;
+}
+
+.gestao-tipo {
+  border-radius: 25px;
+  padding: 8px 30px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gestao-tipo span {
+  font-size: 12.5px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 500;
+}
+
+.gestao-tipo.green-primary {
+  background-color: var(--color-green-primary);
+  border: 2px solid var(--color-green-primary);
+}
+
+.gestao-tipo.green-primary span {
+  color: var(--color-white);
+}
+
+.gestao-tipo.dark-gray {
+  background-color: var(--color-dark-gray);
+  border: 2px solid var(--color-dark-gray);
+}
+
+.gestao-tipo.dark-gray span {
+  color: var(--color-white);
+}
+
+.gestao-tipo.white-border {
+  background-color: var(--color-white);
+  border: 1px solid var(--color-gray-secondary);
+}
+
+.gestao-tipo.white-border span {
+  color: var(--color-light-gray-secondary);
+}
+
+.gestao-tipo.light-gray {
+  background-color: var(--color-light-gray-primary);
+  border: 2px solid var(--color-light-gray-primary);
+}
+
+.gestao-tipo.light-gray span {
+  color: var(--color-white);
+}
+
+/* Texto descritivo */
+.gestao-copy {
+  margin-bottom: 50px;
+  max-width: 1000px;
+}
+
+.gestao-copy p {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: var(--color-dark-gray);
+  text-align: justify;
+}
+
+/* Carrossel */
+.gestao-carousel-container {
+  margin: 60px 0;
+  overflow: hidden;
+  width: 100vw;
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+  height: 300px;
+}
+
+.gestao-carousel {
+  width: 100%;
+  height: 100%;
+}
+
+.gestao-carousel .slick-slide {
+  padding: 0 5px;
+  transition: opacity 0.3s ease;
+  height: 300px;
+}
+
+.gestao-carousel img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.gestao-carousel .slick-center {
+  opacity: 1;
+}
+
+/* Seção de serviços */
+.container-services {
+  margin: 80px auto;
+  max-width: 1100px;
+}
+
+.gestao-services {
+  margin: 80px 0;
+}
+
+.gestao-service-item {
+  display: flex;
+  padding: 40px 0;
+  border-bottom: 1px solid var(--color-light-gray-secondary);
+}
+
+.service-title {
+  width: 30%;
+  font-size: 1.25rem;
+  color: var(--color-light-gray-secondary);
+  font-weight: 400;
+  padding-right: 30px;
+}
+
+.service-description {
+  width: 70%;
+}
+
+.service-description p {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--color-dark-gray);
+  margin: 0;
+  text-align: justify;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .gestao-section {
+    padding: 100px 0 60px;
+  }
+  
+  .gestao-title {
+    font-size: 36px;
+  }
+  
+  .gestao-tipos-container {
+    justify-content: center;
+  }
+  
+  .gestao-service-item {
+    flex-direction: column;
+    padding: 30px 0;
+  }
+  
+  .service-title {
+    width: 100%;
+    margin-bottom: 15px;
+    padding-right: 0;
+  }
+  
+  .service-description {
+    width: 100%;
+  }
+}
+
+/* Banner Carrossel */
+.banner-carrossel {
+  background-color: var(--color-green-primary);
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+  margin-top: 60px;
+}
+
+.text-carousel-container {
+  width: 100%;
+  overflow: hidden;
+}
+
+.text-carousel {
+  display: flex;
+  animation: scrollText 20s linear infinite;
+  white-space: nowrap;
+}
+
+.carousel-item {
+  color: var(--color-white);
+  font-size: 8rem;
+  font-weight: 400;
+  text-transform: uppercase;
+  padding: 0 50px;
+  letter-spacing: 3px;
+  flex-shrink: 0;
+  font-family: var(--font-montserrat);
+}
+
+@keyframes scrollText {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+
+@media (max-width: 480px) {
+  .gestao-section {
+    padding: 80px 0 40px;
+  }
+  
+  .gestao-title {
+    font-size: 32px;
+  }
+  
+  .gestao-tipo {
+    padding: 6px 15px;
+  }
+  
+  .gestao-tipo span {
+    font-size: 11px;
+  }
+  
+  .gestao-copy p {
+    font-size: 14px;
+  }
+  
+  .carousel-item {
+    font-size: 2.5rem;
+    padding: 0 20px;
+  }
+}
