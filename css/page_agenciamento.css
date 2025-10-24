@@ -1,1 +1,566 @@
 /* Header específico para página agenciamento - usando header-pages.css */
+
+/* Estilos para a página de Agenciamento */
+
+body {
+  background-color: var(--color-white);
+  color: var(--color-dark-gray);
+  font-family: var(--font-inter), sans-serif;
+}
+
+.agenciamento-section {
+  padding: 120px 0 80px;
+}
+
+/* Título */
+.agenciamento-title-container {
+  margin-bottom: 50px;
+  display: inline-block;
+}
+
+.agenciamento-title {
+  font-size: 2.5rem;
+  color: var(--color-dark-gray);
+  font-weight: 400;
+  line-height: 1.2;
+  word-spacing: 1rem;
+  display: inline-block;
+  position: relative;
+}
+
+/* Container do Filtro */
+.filter-container {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.filter-label {
+  color: var(--color-green-secondary);
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.filter-dropdown {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 0;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.filter-selected {
+  color: var(--color-light-gray-secondary);
+  font-size: 12.5px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 500;
+}
+
+.filter-arrow {
+  color: var(--color-green-secondary);
+  font-size: 10px;
+  transition: transform 0.3s ease;
+}
+
+.filter-dropdown:hover {
+  border-color: var(--color-green-secondary);
+}
+
+.filter-dropdown:hover .filter-arrow {
+  transform: translateY(2px);
+}
+
+/* Opções de Filtro */
+.filter-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-bottom: 50px;
+}
+
+.filter-option {
+  border-radius: 25px;
+  padding: 8px 30px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background-color: var(--color-white);
+  border: 1px solid var(--color-gray-secondary);
+}
+
+.filter-option {
+  font-size: 12.5px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 500;
+  color: var(--color-light-gray-secondary);
+}
+
+.filter-option.active {
+  background-color: var(--color-green-primary);
+  border: 2px solid var(--color-green-primary);
+  color: var(--color-white);
+}
+
+.filter-option:hover:not(.active) {
+  background-color: var(--color-dark-gray);
+  border-color: var(--color-dark-gray);
+  color: var(--color-white);
+}
+
+/* Botão de Reset */
+.filter-reset {
+  border-radius: 25px;
+  padding: 8px 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--color-light-gray-secondary);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background-color: var(--color-white);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 400;
+  color: var(--color-light-gray-secondary);
+  margin-left: 10px;
+}
+
+.filter-reset:hover {
+  background-color: var(--color-light-gray-tertiary);
+  border-color: var(--color-gray-secondary);
+  color: var(--color-dark-gray);
+}
+
+/* Galeria de Influenciadoras */
+.influencers-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 30px;
+  max-width: 1100px;
+  margin: 0 auto;
+  justify-items: center;
+}
+
+.influencer-card {
+  position: relative;
+  text-align: center;
+  transition: all 0.3s ease;
+  opacity: 1;
+  transform: scale(1);
+  cursor: pointer;
+}
+
+.influencer-card.hidden {
+  opacity: 0;
+  transform: scale(0.8);
+  pointer-events: none;
+  display: none !important;
+}
+
+.influencer-image {
+  width: 200px;
+  height: 200px;
+  margin: 0 auto 15px;
+  border-radius: 50%;
+  overflow: hidden;
+  position: relative;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.influencer-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.influencer-card:hover .influencer-image {
+  transform: scale(1.05);
+}
+
+.influencer-card:hover .influencer-image img {
+  transform: scale(1.1);
+}
+
+.influencer-name-card {
+  background-color: var(--color-green-primary);
+  color: var(--color-white);
+  padding: 5px 15px;
+  border-radius: 25px;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 500;
+  display: inline-block;
+  position: relative;
+  bottom: 20px;
+  z-index: 2;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .agenciamento-section {
+    padding: 100px 0 60px;
+  }
+  
+  .agenciamento-title {
+    font-size: 2rem;
+  }
+  
+  .filter-container {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  
+  .filter-options {
+    justify-content: center;
+  }
+  
+  .filter-reset {
+    margin-left: 0;
+    margin-top: 10px;
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .influencers-gallery {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 20px;
+  }
+  
+  .influencer-image {
+    width: 150px;
+    height: 150px;
+  }
+}
+
+@media (max-width: 480px) {
+  .agenciamento-section {
+    padding: 80px 0 40px;
+  }
+  
+  .agenciamento-title {
+    font-size: 1.8rem;
+  }
+  
+  .filter-option {
+    padding: 6px 15px;
+  }
+  
+  .filter-option span {
+    font-size: 11px;
+  }
+  
+  .influencers-gallery {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+  }
+  
+  .influencer-image {
+    width: 120px;
+    height: 120px;
+  }
+}
+
+/* ===========================
+   INFLUENCER PROFILE PAGE STYLES
+   =========================== */
+
+/* Botão de Voltar */
+.back-button-container {
+  margin-bottom: 30px;
+}
+
+.back-button {
+  background-color: var(--color-green-primary);
+  border: 1px solid var(--color-gray-secondary);
+  border-radius: 25px;
+  padding: 8px 20px;
+  color: var(--color-white);
+  font-size: 12px;
+  text-transform: uppercase;
+  text-decoration: underline;
+  letter-spacing: 1px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.back-button:hover {
+  background-color: var(--color-green-secondary);
+  border-color: var(--color-gray-secondary);
+  color: var(--color-white);
+}
+
+/* Perfil da Influenciadora */
+.influencer-profile {
+  margin-top: 40px;
+}
+
+/* Vídeo Principal */
+.main-video-container {
+  width: 100%;
+  margin-bottom: 40px;
+  overflow: hidden;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.main-video {
+  width: 100%;
+  height: 400px;
+  object-fit: cover;
+  display: block;
+}
+
+/* Informações da Influenciadora */
+.influencer-info {
+  margin-bottom: 60px;
+}
+
+.influencer-header {
+  display: flex;
+  align-items: center;
+}
+
+.influencer-name {
+  font-size: 2rem;
+  color: var(--color-dark-gray);
+  font-weight: 400;
+  margin: 0;
+  flex-shrink: 0;
+}
+
+.influencer-stats {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+.follower-count {
+  color: var(--color-dark-gray);
+  font-size: 1rem;
+  text-decoration: underline;
+}
+
+/* Linha horizontal entre nome e stats */
+.influencer-line {
+  flex: 1;
+  height: 1px;
+  background-color: var(--color-black);
+  margin: 0 10px;
+}
+
+.influencer-handle {
+  color: var(--color-gray-secondary);
+  font-size: 1.1rem;
+  margin-bottom: 20px;
+  font-style: italic;
+}
+
+.social-links {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 30px;
+}
+
+.social-link {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  background-color: var(--color-white);
+  border: 1px solid var(--color-black);
+}
+
+.social-link.tiktok {
+  color: var(--color-black);
+}
+
+.social-link.instagram {
+  color: var(--color-black);
+}
+
+.social-link:hover {
+  transform: scale(1.1);
+}
+
+.social-link svg {
+  width: 20px;
+  height: 20px;
+}
+
+.influencer-description {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--color-dark-gray);
+  text-align: justify;
+}
+
+/* Seção de Portfólio */
+.portfolio-section {
+  margin-top: 60px;
+}
+
+.portfolio-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+.portfolio-item {
+  text-align: center;
+}
+
+.portfolio-video {
+  width: 100%;
+  height: 460px;
+  overflow: hidden;
+  margin-bottom: 15px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.portfolio-video video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.portfolio-video-element {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background-color: #000;
+}
+
+/* Video overlay styles */
+.video-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.9);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.video-overlay video {
+  max-width: 90vw;
+  max-height: 90vh;
+  object-fit: contain;
+  cursor: default;
+  animation: scaleIn 0.3s ease;
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.portfolio-brand {
+  background-color: var(--color-white);
+  color: var(--color-dark-gray);
+  padding: 8px 15px;
+  border: 1px solid var(--color-gray-secondary);
+  border-radius: 20px;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+}
+
+.portfolio-brand-logo {
+  max-height: 30px;
+  max-width: 100%;
+  object-fit: contain;
+}
+
+/* Responsividade para Perfil */
+@media (max-width: 768px) {
+  .influencer-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  
+  .influencer-line {
+    display: none;
+  }
+  
+  .influencer-name {
+    font-size: 1.5rem;
+    margin-right: 0;
+  }
+  
+  .influencer-stats {
+    margin-left: 0;
+  }
+  
+  .main-video {
+    height: 250px;
+  }
+  
+  .portfolio-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+  }
+  
+  .portfolio-video {
+    height: 400px;
+  }
+}
+
+@media (max-width: 480px) {
+  .influencer-name {
+    font-size: 1.3rem;
+  }
+  
+  .main-video {
+    height: 200px;
+  }
+  
+  .portfolio-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+}

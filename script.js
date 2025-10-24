@@ -181,6 +181,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Team section functionality
     initializeTeamSection();
+
+    // Agenciamento page functionality
+    initializeAgenciamentoFilters();
+    
+    // Influencer click functionality
+    initializeInfluencerClicks();
 });
 
 // EmailJS Configuration
@@ -588,4 +594,457 @@ function updateMemberDisplay(memberId) {
         this.style.opacity = '0.5';
         // You could set a default placeholder image here
     };
+}
+
+// ===========================
+// AGENCIAMENTO FILTERS FUNCTIONALITY
+// ===========================
+
+// Initialize agenciamento filters
+function initializeAgenciamentoFilters() {
+    const filterOptions = document.querySelectorAll('.filter-option');
+    const influencerCards = document.querySelectorAll('.influencer-card');
+    const filterSelected = document.querySelector('.filter-selected');
+    const filterDropdown = document.querySelector('.filter-dropdown');
+    const filterReset = document.getElementById('filter-reset');
+
+    if (!filterOptions.length || !influencerCards.length) {
+        return; // Exit if elements not found
+    }
+
+    // Add click event listeners to filter options
+    filterOptions.forEach(option => {
+        option.addEventListener('click', function() {
+            const filterValue = this.getAttribute('data-filter');
+            
+            // Remove active class from all options
+            filterOptions.forEach(opt => opt.classList.remove('active'));
+            
+            // Add active class to clicked option
+            this.classList.add('active');
+            
+            // Update selected filter display
+            if (filterSelected) {
+                filterSelected.textContent = this.textContent;
+            }
+            
+            // Filter influencer cards
+            filterInfluencers(filterValue, influencerCards);
+        });
+    });
+
+    // Add click event listener to reset button
+    if (filterReset) {
+        filterReset.addEventListener('click', function() {
+            // Remove active class from all filter options
+            filterOptions.forEach(opt => opt.classList.remove('active'));
+            
+            // Set first option (LIFESTYLE) as active
+            const firstOption = filterOptions[0];
+            if (firstOption) {
+                firstOption.classList.add('active');
+            }
+            
+            // Update selected filter display
+            if (filterSelected) {
+                filterSelected.textContent = 'LIFESTYLE';
+            }
+            
+            // Show all influencer cards
+            showAllInfluencers(influencerCards);
+        });
+    }
+
+    // Add click event listener to dropdown
+    if (filterDropdown) {
+        filterDropdown.addEventListener('click', function() {
+            // Toggle dropdown functionality could be added here
+            console.log('Dropdown clicked');
+        });
+    }
+}
+
+// Filter influencers based on selected category
+function filterInfluencers(selectedFilter, cards) {
+    const gallery = document.querySelector('.influencers-gallery');
+    
+    // First, hide all cards with animation
+    cards.forEach(card => {
+        card.style.opacity = '0';
+        card.style.transform = 'scale(0.8)';
+    });
+    
+    // After animation, reorganize DOM
+    setTimeout(() => {
+        const visibleCards = [];
+        const hiddenCards = [];
+        
+        // Separate cards into visible and hidden arrays
+        cards.forEach(card => {
+            const categories = card.getAttribute('data-categories');
+            const categoryArray = categories ? categories.split(',') : [];
+            
+            // Check if the card has the selected filter category
+            const hasCategory = categoryArray.includes(selectedFilter);
+            
+            if (hasCategory) {
+                visibleCards.push(card);
+            } else {
+                hiddenCards.push(card);
+            }
+        });
+        
+        // Clear gallery
+        gallery.innerHTML = '';
+        
+        // Add visible cards first
+        visibleCards.forEach(card => {
+            card.classList.remove('hidden');
+            card.style.display = 'block';
+            card.style.opacity = '1';
+            card.style.transform = 'scale(1)';
+            gallery.appendChild(card);
+        });
+        
+        // Add hidden cards at the end (completely hidden)
+        hiddenCards.forEach(card => {
+            card.classList.add('hidden');
+            card.style.display = 'none';
+            card.style.opacity = '0';
+            card.style.transform = 'scale(0.8)';
+            gallery.appendChild(card);
+        });
+    }, 300);
+}
+
+// Show all influencers (reset function)
+function showAllInfluencers(cards) {
+    const gallery = document.querySelector('.influencers-gallery');
+    
+    // Reset to original order
+    setTimeout(() => {
+        // Clear gallery
+        gallery.innerHTML = '';
+        
+        // Add all cards back in original order
+        cards.forEach(card => {
+            card.classList.remove('hidden');
+            card.style.display = 'block';
+            card.style.opacity = '1';
+            card.style.transform = 'scale(1)';
+            gallery.appendChild(card);
+        });
+    }, 100);
+}
+
+// ===========================
+// INFLUENCER CLICK FUNCTIONALITY
+// ===========================
+
+// Influencer data
+const influencerData = {
+    'luiza-machado': {
+        name: 'Luiza Machado',
+        handle: '@luizamachadop',
+        followers: '27.8k',
+        description: 'Luiza Machado é criadora de conteúdo de moda, beleza e lifestyle — virginiana, detalhista e apaixonada por cuidar da estética. Conhecida pelo olhar criativo e cheio de referências, ela acompanha de perto as tendências e transforma isso em conteúdos que vão de looks inspiradores e tutoriais de beleza até momentos de lifestyle que misturam autenticidade e sofisticação.',
+        mainVideo: 'assets/agenciamento/portfolio-luiza-machado/Principal.mov',
+        portfolio: [
+            { video: 'assets/agenciamento/portfolio-luiza-machado/Beleza-na-Web.mp4', brand: 'Beleza na Web', logo: 'assets/agenciamento/logos-marcas/logo-beleza-na-web.png' },
+            { video: 'assets/agenciamento/portfolio-luiza-machado/Eudora.mov', brand: 'Eudora', logo: 'assets/agenciamento/logos-marcas/logo-eudora.png' },
+            { video: 'assets/agenciamento/portfolio-luiza-machado/Ipanema.mov', brand: 'Ipanema', logo: 'assets/agenciamento/logos-marcas/logo-ipanema.png' },
+            { video: 'assets/agenciamento/portfolio-luiza-machado/Melissa.mp4', brand: 'Melissa', logo: 'assets/agenciamento/logos-marcas/logo-melissa.png' }
+        ]
+    },
+    'melissa-hartman': {
+        name: 'Melissa Hartman',
+        handle: '@amelissahartman',
+        followers: '19.3k',
+        description: 'Melissa é uma artista completa: cantora, atriz e influenciadora. Mas é como criadora de conteúdo que ela mostra todo o seu olhar criativo e a capacidade de transformar ideias em narrativas visuais cheias de personalidade. Com autenticidade, estética própria e versatilidade, constrói publicidades que se destacam pela originalidade e conexão com o público.',
+        mainVideo: 'assets/agenciamento/portfolio-melissa-hartman/Principal.mov',
+        portfolio: [
+            { video: 'assets/agenciamento/portfolio-melissa-hartman/Loreal.mp4', brand: 'L\'Oréal', logo: 'assets/agenciamento/logos-marcas/logo-loreal.png' },
+            { video: 'assets/agenciamento/portfolio-melissa-hartman/O Boticário.mov', brand: 'O Boticário', logo: 'assets/agenciamento/logos-marcas/logo-boticario.png' },
+            { video: 'assets/agenciamento/portfolio-melissa-hartman/Tuyo.mp4', brand: 'Tuyo', logo: 'assets/agenciamento/logos-marcas/logo-tuyo.png' },
+            { video: 'assets/agenciamento/portfolio-melissa-hartman/Principal.mov', brand: 'Portfolio', logo: 'assets/agenciamento/logos-marcas/portfolio.png' }
+        ]
+    },
+    'flavia-dutra': {
+        name: 'Flavia Dutra',
+        handle: '@fflaviadutra',
+        followers: '75.2k',
+        description: 'Flavia é criadora de conteúdo nos nichos de moda e beleza, com uma forma única de se comunicar: leve, divertida e cheia de bom humor. Seus conteúdos misturam referências de estilo e dicas de beleza com um toque descontraído, que aproxima e engaja o público. Sempre autêntica, ela transforma o dia a dia em inspirações criativas, tornando cada parceria ainda mais natural e envolvente.',
+        mainVideo: 'assets/agenciamento/portfolio-flavia-dutra/Principal.mov',
+        portfolio: [
+            { video: 'assets/agenciamento/portfolio-flavia-dutra/Video1.mp4', brand: 'Marca A', logo: 'assets/agenciamento/logos-marcas/marca-a.png' },
+            { video: 'assets/agenciamento/portfolio-flavia-dutra/Video2.mp4', brand: 'Marca B', logo: 'assets/agenciamento/logos-marcas/marca-b.png' },
+            { video: 'assets/agenciamento/portfolio-flavia-dutra/Video3.mp4', brand: 'Marca C', logo: 'assets/agenciamento/logos-marcas/marca-c.png' },
+            { video: 'assets/agenciamento/portfolio-flavia-dutra/Video4.mp4', brand: 'Marca D', logo: 'assets/agenciamento/logos-marcas/marca-d.png' }
+        ]
+    },
+    'julia-ceschin': {
+        name: 'Julia Ceschin',
+        handle: '@juliacceschin',
+        followers: '69.7k',
+        description: 'Julia é criadora de conteúdo apaixonada por moda e também pelo universo fitness. Com um estilo próprio e cheio de atitude, ela compartilha desde inspirações de looks até sua rotina de treinos e bem-estar. O que mais chama atenção em seu trabalho é a dedicação em produzir vídeos elaborados, com edições criativas e diferentes, que fazem seu conteúdo se destacar nas redes.',
+        mainVideo: 'assets/agenciamento/portfolio-julia-ceschin/Principal.mov',
+        portfolio: [
+            { video: 'assets/agenciamento/portfolio-julia-ceschin/C&A.mp4', brand: 'C&A', logo: 'assets/agenciamento/logos-marcas/logo-c&a.png' },
+            { video: 'assets/agenciamento/portfolio-julia-ceschin/Eudora.mp4', brand: 'Eudora', logo: 'assets/agenciamento/logos-marcas/logo-eudora.png' },
+            { video: 'assets/agenciamento/portfolio-julia-ceschin/FarmaLife.mp4', brand: 'FarmaLife', logo: 'assets/agenciamento/logos-marcas/logo-farmalife.png' },
+            { video: 'assets/agenciamento/portfolio-julia-ceschin/Tangle Teezer.mp4', brand: 'Tangle Teezer', logo: 'assets/agenciamento/logos-marcas/logo-tangle-teezer.webp' }
+        ]
+    },
+    'lara-pear': {
+        name: 'Lara Pear',
+        handle: '@pear.lara',
+        followers: '29.2k',
+        description: 'Lara é criadora de conteúdo cheia de personalidade — espontânea, autêntica e sempre bem-humorada. Nos nichos de moda, beleza, casa e decoração, ela compartilha inspirações de forma leve e divertida, conquistando o público pela proximidade e naturalidade.',
+        mainVideo: 'assets/agenciamento/portfolio-lara-pear/Principal.mov',
+        portfolio: [
+            { video: 'assets/agenciamento/portfolio-lara-pear/Cif.mp4', brand: 'Cif', logo: 'assets/agenciamento/logos-marcas/logo-cif.png' },
+            { video: 'assets/agenciamento/portfolio-lara-pear/Mantecorp.mp4', brand: 'Mantecorp', logo: 'assets/agenciamento/logos-marcas/logo-mantecorp.png' },
+            { video: 'assets/agenciamento/portfolio-lara-pear/Nívea.mp4', brand: 'Nívea', logo: 'assets/agenciamento/logos-marcas/logo-nivea.png' },
+            { video: 'assets/agenciamento/portfolio-lara-pear/Sallve.mp4', brand: 'Sallve', logo: 'assets/agenciamento/logos-marcas/logo-sallve.png' }
+        ]
+    },
+    'gabriela-medeiros': {
+        name: 'Gabriela Medeiros',
+        handle: '@gabrielamedeiros',
+        followers: '327k',
+        description: 'Gabriela Medeiros é uma criadora de conteúdo especializada em beleza e fitness. Com sua abordagem autêntica e conhecimento técnico, ela produz conteúdos educativos que inspiram sua audiência a cuidar da saúde e bem-estar de forma equilibrada e sustentável.',
+        mainVideo: 'assets/agenciamento/portfolio-gabriela-medeiros/Principal.mov',
+        portfolio: [
+            { video: 'assets/agenciamento/portfolio-gabriela-medeiros/Video1.mp4', brand: 'Marca A', logo: 'assets/agenciamento/logos-marcas/marca-a.png' },
+            { video: 'assets/agenciamento/portfolio-gabriela-medeiros/Video2.mp4', brand: 'Marca B', logo: 'assets/agenciamento/logos-marcas/marca-b.png' },
+            { video: 'assets/agenciamento/portfolio-gabriela-medeiros/Video3.mp4', brand: 'Marca C', logo: 'assets/agenciamento/logos-marcas/marca-c.png' },
+            { video: 'assets/agenciamento/portfolio-gabriela-medeiros/Video4.mp4', brand: 'Marca D', logo: 'assets/agenciamento/logos-marcas/marca-d.png' }
+        ]
+    }
+};
+
+// Initialize influencer click functionality
+function initializeInfluencerClicks() {
+    const influencerCards = document.querySelectorAll('.influencer-card');
+    
+    if (!influencerCards.length) {
+        return; // Exit if not on agenciamento page
+    }
+    
+    influencerCards.forEach(card => {
+        card.addEventListener('click', function() {
+            const influencerName = this.querySelector('.influencer-name-card').textContent.toLowerCase();
+            const influencerKey = getInfluencerKey(influencerName);
+            
+            if (influencerKey && influencerData[influencerKey]) {
+                createInfluencerPage(influencerKey);
+            }
+        });
+    });
+}
+
+// Get influencer key from name
+function getInfluencerKey(name) {
+    const nameMap = {
+        'luiza machado': 'luiza-machado',
+        'melissa hartman': 'melissa-hartman',
+        'flavia dutra': 'flavia-dutra',
+        'julia ceschin': 'julia-ceschin',
+        'lara pear': 'lara-pear',
+        'gabriela medeiros': 'gabriela-medeiros'
+    };
+    
+    return nameMap[name] || null;
+}
+
+// Create dynamic influencer page
+function createInfluencerPage(influencerKey) {
+    const data = influencerData[influencerKey];
+    if (!data) return;
+    
+    // Create new page content
+    const newContent = `
+        <section class="agenciamento-section">
+            <div class="container">
+                <!-- Título -->
+                <div class="agenciamento-title-container">
+                    <h1 class="agenciamento-title">Conheça<br>nosso casting</h1>
+                </div>
+
+                <!-- Botão de Voltar -->
+                <div class="back-button-container">
+                    <button class="back-button" onclick="window.location.href='agenciamento.html'">
+                        ← Voltar ao casting
+                    </button>
+                </div>
+
+                <!-- Seção da Influenciadora -->
+                <div class="influencer-profile">
+                    <!-- Vídeo Principal -->
+                    <div class="main-video-container">
+                        <video class="main-video" autoplay muted loop playsinline>
+                            <source src="${data.mainVideo}" type="video/mp4">
+                            Seu navegador não suporta vídeos.
+                        </video>
+                    </div>
+
+                    <!-- Informações da Influenciadora -->
+                    <div class="influencer-info">
+                        <div class="influencer-header">
+                            <h2 class="influencer-name">${data.name}</h2>
+                            <div class="influencer-line"></div>
+                            <div class="influencer-stats">
+                                <span class="follower-count">${data.followers} de seguidores</span>
+                            </div>
+                        </div>
+                        
+                        <div class="influencer-handle">${data.handle}</div>
+                        
+                        <div class="social-links">
+                            <a href="#" class="social-link tiktok" aria-label="TikTok">
+                                <svg viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/>
+                                </svg>
+                            </a>
+                            <a href="#" class="social-link instagram" aria-label="Instagram">
+                                <svg viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                                </svg>
+                            </a>
+                        </div>
+                        
+                        <p class="influencer-description">${data.description}</p>
+                    </div>
+
+                    <!-- Portfólio de Vídeos -->
+                    <div class="portfolio-section">
+                        <div class="portfolio-grid">
+                            ${data.portfolio.map(item => `
+                                <div class="portfolio-item">
+                                    <div class="portfolio-video">
+                                        <video class="portfolio-video-element" autoplay muted loop playsinline>
+                                            <source src="${item.video}" type="video/mp4">
+                                        </video>
+                                    </div>
+                                    <div class="portfolio-brand">
+                                        ${item.logo ? `<img src="${item.logo}" alt="${item.brand}" class="portfolio-brand-logo">` : item.brand}
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    `;
+    
+    // Replace main content
+    const main = document.querySelector('main');
+    if (main) {
+        main.innerHTML = newContent;
+        
+        // Initialize portfolio video interactions
+        initializePortfolioVideos();
+    }
+}
+
+// Initialize portfolio video interactions
+function initializePortfolioVideos() {
+    const portfolioVideos = document.querySelectorAll('.portfolio-video-element');
+    
+    portfolioVideos.forEach(video => {
+        // Add click event to expand video
+        video.addEventListener('click', function(e) {
+            e.preventDefault();
+            expandVideo(this);
+        });
+        
+        // Add hover effect to show it's clickable
+        video.addEventListener('mouseenter', function() {
+            this.style.cursor = 'pointer';
+            this.style.opacity = '0.9';
+        });
+        
+        video.addEventListener('mouseleave', function() {
+            this.style.opacity = '1';
+        });
+    });
+}
+
+// Expand video to fullscreen-like experience
+function expandVideo(video) {
+    // Create overlay
+    const overlay = document.createElement('div');
+    overlay.className = 'video-overlay';
+    overlay.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.9);
+        z-index: 9999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+    `;
+    
+    // Create video container
+    const videoContainer = document.createElement('div');
+    videoContainer.style.cssText = `
+        position: relative;
+        max-width: 90vw;
+        max-height: 90vh;
+        width: auto;
+        height: auto;
+    `;
+    
+    // Clone the video
+    const expandedVideo = video.cloneNode(true);
+    expandedVideo.style.cssText = `
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        cursor: default;
+    `;
+    
+    // Enable sound and controls for expanded video
+    expandedVideo.muted = false;
+    expandedVideo.controls = true;
+    expandedVideo.loop = false;
+    
+    // Add to DOM
+    videoContainer.appendChild(expandedVideo);
+    overlay.appendChild(videoContainer);
+    document.body.appendChild(overlay);
+    
+    // Close on overlay click
+    overlay.addEventListener('click', function(e) {
+        if (e.target === overlay) {
+            closeExpandedVideo();
+        }
+    });
+    
+    // Close on escape key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            closeExpandedVideo();
+        }
+    });
+    
+    // Prevent video click from closing
+    expandedVideo.addEventListener('click', function(e) {
+        e.stopPropagation();
+    });
+    
+    // Function to close expanded video
+    function closeExpandedVideo() {
+        document.body.removeChild(overlay);
+        // Resume original video playback
+        video.muted = true;
+        video.controls = false;
+        video.loop = true;
+        video.play();
+    }
 } 
