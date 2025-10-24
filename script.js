@@ -20,9 +20,14 @@ document.addEventListener('DOMContentLoaded', function() {
         header.classList.toggle('menu-open');
     });
 
-    // Close menu when clicking on a navigation link
+    // Close menu when clicking on a navigation link (excluding dropdown toggles)
     const navLinks = document.querySelectorAll('.nav-link, .cta-button');
     navLinks.forEach(link => {
+        // Skip dropdown toggles to avoid conflicts
+        if (link.classList.contains('dropdown-toggle')) {
+            return;
+        }
+        
         link.addEventListener('click', function() {
             mobileMenuToggle.classList.remove('active');
             navMenu.classList.remove('active');
@@ -32,25 +37,70 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Dropdown menu functionality
     const dropdowns = document.querySelectorAll('.dropdown');
+    
+    // Detect if device supports touch
+    const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0 || window.innerWidth <= 1024;
+    
     dropdowns.forEach(dropdown => {
         const dropdownToggle = dropdown.querySelector('.dropdown-toggle');
         const dropdownMenu = dropdown.querySelector('.dropdown-menu');
         
-        // Toggle dropdown on click
-        dropdownToggle.addEventListener('click', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            
-            // Close other dropdowns
-            dropdowns.forEach(otherDropdown => {
-                if (otherDropdown !== dropdown) {
-                    otherDropdown.classList.remove('active');
+        // Different behavior for touch devices vs desktop
+        if (isTouchDevice) {
+            // For touch devices (mobile/tablet), implement two-click system
+            dropdownToggle.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                // Prevent multiple rapid clicks
+                if (dropdownToggle.dataset.clicking === 'true') {
+                    return;
+                }
+                dropdownToggle.dataset.clicking = 'true';
+                
+                setTimeout(() => {
+                    dropdownToggle.dataset.clicking = 'false';
+                }, 300);
+                
+                // Close other dropdowns
+                dropdowns.forEach(otherDropdown => {
+                    if (otherDropdown !== dropdown) {
+                        otherDropdown.classList.remove('active');
+                    }
+                });
+                
+                // Check if dropdown is already open
+                if (dropdown.classList.contains('active')) {
+                    // Second click: close dropdown and redirect to section
+                    dropdown.classList.remove('active');
+                    header.classList.remove('dropdown-open');
+                    
+                    // Close mobile menu
+                    mobileMenuToggle.classList.remove('active');
+                    navMenu.classList.remove('active');
+                    header.classList.remove('menu-open');
+                    
+                    // Allow the default link behavior to redirect to section
+                    setTimeout(() => {
+                        const href = dropdownToggle.getAttribute('href');
+                        if (href && href.startsWith('#')) {
+                            const target = document.querySelector(href);
+                            if (target) {
+                                target.scrollIntoView({
+                                    behavior: 'smooth',
+                                    block: 'start'
+                                });
+                            }
+                        }
+                    }, 100);
+                } else {
+                    // First click: open dropdown
+                    dropdown.classList.add('active');
+                    header.classList.add('dropdown-open');
                 }
             });
-            
-            // Toggle current dropdown
-            dropdown.classList.toggle('active');
-        });
+        }
+        // For desktop, keep the original hover behavior (no changes needed)
         
         // Prevent dropdown links from closing the mobile menu
         const dropdownLinks = dropdown.querySelectorAll('.dropdown-link');
@@ -65,6 +115,7 @@ document.addEventListener('DOMContentLoaded', function() {
         document.addEventListener('click', function(e) {
             if (!dropdown.contains(e.target)) {
                 dropdown.classList.remove('active');
+                header.classList.remove('dropdown-open');
             }
         });
     });
@@ -81,8 +132,13 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Smooth scrolling for navigation links
+    // Smooth scrolling for navigation links (excluding dropdown toggles)
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        // Skip dropdown toggles to avoid conflicts
+        if (anchor.classList.contains('dropdown-toggle')) {
+            return;
+        }
+        
         anchor.addEventListener('click', function (e) {
             e.preventDefault();
             const target = document.querySelector(this.getAttribute('href'));

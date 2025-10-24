@@ -215,6 +215,10 @@
 
 .dropdown-toggle {
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
 }
 
 .dropdown-menu {
@@ -293,20 +297,41 @@
         font-size: 1.1rem;
     }
     
+    .dropdown-toggle {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        text-align: center;
+        width: 100% !important;
+    }
+    
     .dropdown-menu {
-        position: static;
-        transform: none;
-        background: rgba(0, 0, 0, 0.8);
-        margin-top: 0.5rem;
-        border-radius: 4px;
-        opacity: 1;
-        visibility: visible;
-        display: none;
-        pointer-events: auto;
+        position: static !important;
+        transform: none !important;
+        background: var(--color-dark-gray) !important;
+        margin-top: 0.5rem !important;
+        border-radius: 4px !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        display: none !important;
+        pointer-events: auto !important;
+        min-width: auto !important;
+        width: 100% !important;
+        padding: 0.5rem 0 !important;
     }
     
     .dropdown.active .dropdown-menu {
-        display: block;
+        display: block !important;
+    }
+    
+    .header.menu-open.dropdown-open .nav-container {
+        height: 94vh;
+        transition: height 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+    
+    .header.menu-open.dropdown-open::before {
+        height: 94vh;
+        transition: height 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     }
     
 }
@@ -350,6 +375,16 @@
     
     .header.menu-open .nav-container {
         height: 55vh;
+        transition: height 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+    
+    .header.menu-open.dropdown-open .nav-container {
+        height: 88vh;
+        transition: height 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+    
+    .header.menu-open.dropdown-open::before {
+        height: 88vh;
         transition: height 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     }
 }
