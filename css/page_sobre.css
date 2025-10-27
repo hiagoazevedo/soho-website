@@ -150,14 +150,52 @@
   margin-bottom: 0.5rem;
   line-height: 1;
   text-transform: lowercase;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
 }
 
 .stat-item p {
   font-family: var(--font-inter);
   font-size: 0.9rem;
   color: var(--color-light-gray-tertiary);
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
   letter-spacing: 1px;
   margin: 0;
+}
+
+/* Animações ativadas */
+.statistics-section.animate .stat-item h2 {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.statistics-section.animate .stat-item p {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Animação escalonada para cada item */
+.statistics-section.animate .stat-item:nth-child(1) h2,
+.statistics-section.animate .stat-item:nth-child(1) p {
+  transition-delay: 0.1s;
+}
+
+.statistics-section.animate .stat-item:nth-child(2) h2,
+.statistics-section.animate .stat-item:nth-child(2) p {
+  transition-delay: 0.2s;
+}
+
+.statistics-section.animate .stat-item:nth-child(3) h2,
+.statistics-section.animate .stat-item:nth-child(3) p {
+  transition-delay: 0.3s;
+}
+
+.statistics-section.animate .stat-item:nth-child(4) h2,
+.statistics-section.animate .stat-item:nth-child(4) p {
+  transition-delay: 0.4s;
 }
 
 /* Seção Nosso Time */
@@ -310,6 +348,15 @@
   .stat-item h2 {
     font-size: 3.5rem;
   }
+  
+  /* Ajustar animações para tablet */
+  .stat-item h2 {
+    transform: translateY(20px);
+  }
+  
+  .stat-item p {
+    transform: translateY(15px);
+  }
 
   /* Seção do time - tablet */
   .team-container {
@@ -430,6 +477,15 @@
 
   .stat-item p {
     font-size: 0.8rem;
+  }
+  
+  /* Ajustar animações para mobile */
+  .stat-item h2 {
+    transform: translateY(15px);
+  }
+  
+  .stat-item p {
+    transform: translateY(10px);
   }
 
   /* Seção do time - mobile */

@@ -9,6 +9,7 @@
   <link rel="stylesheet" href="css/page_producao_conteudo.css">
   <link rel="stylesheet" href="css/page_gestao_redes.css">
   <link rel="stylesheet" href="css/index/footer.css">
+  <link rel="stylesheet" href="css/animations.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css">
 </head>
@@ -91,8 +92,8 @@
       </div>
       
       <div class="banner-item" id="automobilistico">
-        <img src="assets/portfolio/capa-automobilistico.jpeg" alt="Carros">
-        <div class="banner-title right">CARROS</div>
+        <img src="assets/portfolio/capa-automobilistico.jpeg" alt="Automobilístico">
+        <div class="banner-title right">AUTOMOBILÍSTICO</div>
       </div>
       
       <div class="banner-item" id="gastronomia">
@@ -147,6 +148,7 @@
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
   <script src="script.js"></script>
+  <script src="js/animations.js"></script>
   <script>
     // Função para trocar o conteúdo da main pelo portfolio específico
     function showPortfolio(ramo) {
@@ -157,7 +159,7 @@
         <section class="portfolio-section">
           <div class="portfolio-container">
             <h2 class="portfolio-title">${portfolioData.title}</h2>
-            <div class="portfolio-grid">
+            <div class="portfolio-grid portfolio-${ramo}">
               ${portfolioData.images.map(img => `
                 <div class="portfolio-item">
                   <img src="${img.src}" alt="${img.alt}" loading="lazy">
@@ -211,7 +213,7 @@
           ]
         },
         automobilistico: {
-          title: 'CARROS',
+          title: 'AUTOMOBILÍSTICO',
           images: [
             { src: 'assets/portfolio/automobilistico/automobilistico-1.jpeg', alt: 'Carro 1' },
             { src: 'assets/portfolio/automobilistico/automobilistico-2.jpeg', alt: 'Carro 2' },
@@ -230,8 +232,8 @@
           images: [
             { src: 'assets/portfolio/gastronomia/gastronomia-1.jpeg', alt: 'Gastronomia 1' },
             { src: 'assets/portfolio/gastronomia/gastronomia-2.jpeg', alt: 'Gastronomia 2' },
-            { src: 'assets/portfolio/gastronomia/gastronomia-3.jpg', alt: 'Gastronomia 3' },
-            { src: 'assets/portfolio/gastronomia/gastronomia-4.jpeg', alt: 'Gastronomia 4' },
+            { src: 'assets/portfolio/gastronomia/gastronomia-3.jpeg', alt: 'Gastronomia 3' },
+            { src: 'assets/portfolio/gastronomia/gastronomia-4.jpg', alt: 'Gastronomia 4' },
             { src: 'assets/portfolio/gastronomia/gastronomia-5.jpg', alt: 'Gastronomia 5' },
             { src: 'assets/portfolio/gastronomia/gastronomia-6.jpeg', alt: 'Gastronomia 6' },
             { src: 'assets/portfolio/gastronomia/gastronomia-7.jpg', alt: 'Gastronomia 7' },

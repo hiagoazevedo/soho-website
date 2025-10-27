@@ -243,6 +243,12 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Influencer click functionality
     initializeInfluencerClicks();
+    
+    // Statistics section animation
+    initializeStatisticsAnimation();
+    
+    // Banners animation
+    initializeBannersAnimation();
 });
 
 // EmailJS Configuration
@@ -1103,4 +1109,77 @@ function expandVideo(video) {
         video.loop = true;
         video.play();
     }
+}
+
+// ===========================
+// STATISTICS SECTION ANIMATION
+// ===========================
+
+// Initialize statistics section animation
+function initializeStatisticsAnimation() {
+    const statisticsSection = document.querySelector('.statistics-section');
+    
+    if (!statisticsSection) {
+        return; // Exit if not on sobre page
+    }
+    
+    // Create intersection observer
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                // Add animate class when section comes into view
+                entry.target.classList.add('animate');
+                
+                // Unobserve after animation to prevent re-triggering
+                observer.unobserve(entry.target);
+            }
+        });
+    }, {
+        threshold: 0.3, // Trigger when 30% of the section is visible
+        rootMargin: '0px 0px -50px 0px' // Start animation slightly before section is fully visible
+    });
+    
+    // Start observing the statistics section
+    observer.observe(statisticsSection);
+}
+
+// ===========================
+// BANNERS ANIMATION
+// ===========================
+
+// Initialize banners animation
+function initializeBannersAnimation() {
+    const bannersSection = document.querySelector('.ramos-banners');
+    
+    if (!bannersSection) {
+        return; // Exit if not on produção de conteúdo page
+    }
+    
+    // Get all banner items except the first one (which stays static)
+    const bannerItems = bannersSection.querySelectorAll('.banner-item:not(:first-child)');
+    
+    if (bannerItems.length === 0) {
+        return;
+    }
+    
+    // Create intersection observer for individual banners
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                // Add animate class to the specific banner
+                entry.target.classList.add('animate');
+                
+                // Unobserve after animation to prevent re-triggering
+                observer.unobserve(entry.target);
+            }
+        });
+    }, {
+        threshold: 0.1, // Trigger when 10% of the banner is visible
+        rootMargin: '0px 0px -50px 0px' // Start animation when banner is closer to viewport
+    });
+    
+    // Start observing each banner individually
+    bannerItems.forEach(banner => {
+        observer.observe(banner);
+    });
 } 

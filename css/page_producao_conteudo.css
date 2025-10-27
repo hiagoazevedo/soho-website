@@ -9,7 +9,7 @@ body {
 }
 
 .producao-section {
-  padding: 120px 0 80px;
+  padding: 120px 0 60px;
 }
 
 /* Título */
@@ -145,6 +145,19 @@ body {
   display: block;
 }
 
+/* Primeiro banner fica estatico */
+.banner-item:first-child {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Demais banners com animação individual */
+.banner-item:not(:first-child) {
+  opacity: 0;
+  transform: translateY(50px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
 .banner-item img {
   width: 100%;
   height: 100%;
@@ -189,10 +202,20 @@ body {
   left: 30px;
 }
 
+/* Animações individuais ativadas */
+.banner-item.animate {
+  opacity: 1;
+  transform: translateY(0);
+}
+
 /* Responsividade para banners */
 @media (max-width: 768px) {
   .banner-item {
     height: 300px;
+  }
+  
+  .banner-item:not(:first-child) {
+    transform: translateY(30px);
   }
   
   .banner-title {
@@ -213,6 +236,10 @@ body {
 @media (max-width: 480px) {
   .banner-item {
     height: 250px;
+  }
+  
+  .banner-item:not(:first-child) {
+    transform: translateY(20px);
   }
   
   .banner-title {
@@ -276,65 +303,345 @@ body {
   display: block;
 }
 
-/* Layout específico para arquitetura - baseado na imagem de referência */
-.portfolio-grid .portfolio-item:nth-child(1) {
+/* ===========================================
+   LAYOUTS ESPECÍFICOS POR RAMO
+   =========================================== */
+
+/* ARQUITETURA & MARCENARIA - Layout original */
+.portfolio-arquitetura .portfolio-item:nth-child(1) {
   grid-column: 1 / 11;
+  grid-row: 1;
+  height: 400px;
+}
+
+.portfolio-arquitetura .portfolio-item:nth-child(2) {
+  grid-column: 1 / 8;
+  grid-row: 2;
+  height: 350px;
+}
+
+.portfolio-arquitetura .portfolio-item:nth-child(3) {
+  grid-column: 8 / 11;
+  grid-row: 2;
+  height: 350px;
+}
+
+.portfolio-arquitetura .portfolio-item:nth-child(4) {
+  grid-column: 1 / 3;
+  grid-row: 3;
+  height: 300px;
+}
+
+.portfolio-arquitetura .portfolio-item:nth-child(5) {
+  grid-column: 3 / 11;
+  grid-row: 3;
+  height: 300px;
+}
+
+.portfolio-arquitetura .portfolio-item:nth-child(6) {
+  grid-column: 1 / 11;
+  grid-row: 4;
+  height: 300px;
+}
+
+.portfolio-arquitetura .portfolio-item:nth-child(7) {
+  grid-column: 1 / 6;
+  grid-row: 5;
+  height: 400px;
+}
+
+.portfolio-arquitetura .portfolio-item:nth-child(8) {
+  grid-column: 6 / 11;
+  grid-row: 5;
+  height: 400px;
+}
+
+.portfolio-arquitetura .portfolio-item:nth-child(9) {
+  grid-column: 1 / 4;
+  grid-row: 6;
+  height: 400px;
+}
+
+.portfolio-arquitetura .portfolio-item:nth-child(10) {
+  grid-column: 4 / 11;
+  grid-row: 6;
+  height: 400px;
+}
+
+/* MODA & VESTUÁRIO - Layout mais vertical e elegante */
+.portfolio-moda .portfolio-item:nth-child(1) {
+  grid-column: 1 / 6;
+  grid-row: 1;
+  height: 350px;
+}
+
+.portfolio-moda .portfolio-item:nth-child(2) {
+  grid-column: 6 / 11;
+  grid-row: 1;
+  height: 350px;
+}
+
+.portfolio-moda .portfolio-item:nth-child(3) {
+  grid-column: 1 / 4;
+  grid-row: 2;
+  height: 250px;
+}
+
+.portfolio-moda .portfolio-item:nth-child(4) {
+  grid-column: 4 / 11;
+  grid-row: 2;
+  height: 250px;
+}
+
+.portfolio-moda .portfolio-item:nth-child(4) img {
+  object-position: 50% 30%;
+}
+
+.portfolio-moda .portfolio-item:nth-child(5) {
+  grid-column: 1 / 7;
+  grid-row: 3;
+  height: 350px;
+}
+
+.portfolio-moda .portfolio-item:nth-child(5) img {
+  object-position: 50% 40%;
+}
+
+.portfolio-moda .portfolio-item:nth-child(6) {
+  grid-column: 7 / 11;
+  grid-row: 3;
+  height: 350px;
+}
+
+.portfolio-moda .portfolio-item:nth-child(7) {
+  grid-column: 1 / 4;
+  grid-row: 4;
+  height: 400px;
+}
+
+.portfolio-moda .portfolio-item:nth-child(8) {
+  grid-column: 4 / 11;
+  grid-row: 4;
+  height: 400px;
+}
+
+.portfolio-moda .portfolio-item:nth-child(9) {
+  grid-column: 1 / 6;
+  grid-row: 5;
+  height: 350px;
+}
+
+.portfolio-moda .portfolio-item:nth-child(10) {
+  grid-column: 6 / 11;
+  grid-row: 5;
+  height: 350px;
+}
+
+/* AUTOMOBILÍSTICO - Layout horizontal e dinâmico */
+.portfolio-automobilistico .portfolio-item:nth-child(1) {
+  grid-column: 1 / 11;
+  grid-row: 1;
+  height: 500px;
+}
+
+.portfolio-automobilistico .portfolio-item:nth-child(2) {
+  grid-column: 1 / 4;
+  grid-row: 2;
+  height: 400px;
+}
+
+.portfolio-automobilistico .portfolio-item:nth-child(3) {
+  grid-column: 4 / 11;
+  grid-row: 2;
+  height: 400px;
+}
+
+.portfolio-automobilistico .portfolio-item:nth-child(4) {
+  grid-column: 1 / 8;
+  grid-row: 3;
+  height: 350px; 
+}
+
+.portfolio-automobilistico .portfolio-item:nth-child(4) img {
+  object-position: 50% 40%;
+}
+
+.portfolio-automobilistico .portfolio-item:nth-child(5) {
+  grid-column: 8 / 11;
+  grid-row: 3;
+  height: 350px;
+}
+
+.portfolio-automobilistico .portfolio-item:nth-child(6) {
+  grid-column: 1 / 4;
+  grid-row: 4;
+  height: 300px;
+}
+
+.portfolio-automobilistico .portfolio-item:nth-child(7) {
+  grid-column: 4 / 11;
+  grid-row: 4;
+  height: 300px;
+}
+
+.portfolio-automobilistico .portfolio-item:nth-child(8) {
+  grid-column: 1 / 8;
+  grid-row: 5;
+  height: 300px;
+}
+
+.portfolio-automobilistico .portfolio-item:nth-child(9) {
+  grid-column: 8 / 11;
+  grid-row: 5;
+  height: 300px;
+}
+
+.portfolio-automobilistico .portfolio-item:nth-child(10) {
+  grid-column: 1 / 11;
+  grid-row: 6;
+  height: 350px;
+}
+
+/* GASTRONOMIA - Layout quadrado e harmonioso */
+.portfolio-gastronomia .portfolio-item:nth-child(1) {
+  grid-column: 1 / 11;
+  grid-row: 1;
+  height: 350px;
+}
+
+.portfolio-gastronomia .portfolio-item:nth-child(2) {
+  grid-column: 1 / 3;
+  grid-row: 2;
+  height: 280px;
+}
+
+.portfolio-gastronomia .portfolio-item:nth-child(3) {
+  grid-column: 3 / 9;
+  grid-row: 2;
+  height: 280px;
+}
+
+.portfolio-gastronomia .portfolio-item:nth-child(3) img {
+  object-position: 50% 80%;
+}
+
+.portfolio-gastronomia .portfolio-item:nth-child(4) {
+  grid-column: 9 / 11;
+  grid-row: 2;
+  height: 280px;
+}
+
+.portfolio-gastronomia .portfolio-item:nth-child(5) {
+  grid-column: 1 / 6;
+  grid-row: 3;
+  height: 400px;
+}
+
+.portfolio-gastronomia .portfolio-item:nth-child(5) img {
+  object-position: 50% 85%;
+}
+
+.portfolio-gastronomia .portfolio-item:nth-child(6) {
+  grid-column: 6 / 11;
+  grid-row: 3;
+  height: 400px;
+}
+
+.portfolio-gastronomia .portfolio-item:nth-child(6) img {
+  object-position: 50% 55%;
+}
+
+.portfolio-gastronomia .portfolio-item:nth-child(7) {
+  grid-column: 1 / 7;
+  grid-row: 4;
+  height: 400px;
+}
+
+.portfolio-gastronomia .portfolio-item:nth-child(7) img {
+  object-position: 50% 68%;
+}
+
+.portfolio-gastronomia .portfolio-item:nth-child(8) {
+  grid-column: 7 / 11;
+  grid-row: 4;
+  height: 400px;
+}
+
+.portfolio-gastronomia .portfolio-item:nth-child(9) {
+  grid-column: 1 / 4;
+  grid-row: 5;
+  height: 400px;
+}
+
+.portfolio-gastronomia .portfolio-item:nth-child(10) {
+  grid-column: 4 / 11;
+  grid-row: 5;
+  height: 400px;
+}
+
+.portfolio-gastronomia .portfolio-item:nth-child(10) img {
+  object-position: 50% 60%;
+}
+
+/* MERCADO IMOBILIÁRIO - Layout amplo e espaçoso */
+.portfolio-imobiliario .portfolio-item:nth-child(1) {
+  grid-column: 1 / 7;
   grid-row: 1;
   height: 300px;
 }
 
-.portfolio-grid .portfolio-item:nth-child(2) {
-  grid-column: 1 / 6;
-  grid-row: 2;
-  height: 250px;
-}
-
-.portfolio-grid .portfolio-item:nth-child(3) {
-  grid-column: 6 / 11;
-  grid-row: 2;
-  height: 250px;
-}
-
-.portfolio-grid .portfolio-item:nth-child(4) {
-  grid-column: 1 / 3;
-  grid-row: 3;
-  height: 200px;
-}
-
-.portfolio-grid .portfolio-item:nth-child(5) {
-  grid-column: 3 / 6;
-  grid-row: 3;
-  height: 200px;
-}
-
-.portfolio-grid .portfolio-item:nth-child(6) {
-  grid-column: 6 / 11;
-  grid-row: 3;
-  height: 200px;
-}
-
-.portfolio-grid .portfolio-item:nth-child(7) {
-  grid-column: 1 / 4;
-  grid-row: 4;
-  height: 180px;
-}
-
-.portfolio-grid .portfolio-item:nth-child(8) {
-  grid-column: 4 / 7;
-  grid-row: 4;
-  height: 180px;
-}
-
-.portfolio-grid .portfolio-item:nth-child(9) {
+.portfolio-imobiliario .portfolio-item:nth-child(2) {
   grid-column: 7 / 11;
-  grid-row: 4;
-  height: 180px;
+  grid-row: 1;
+  height: 300px;
 }
 
-.portfolio-grid .portfolio-item:nth-child(10) {
-  grid-column: 1 / 11;
-  grid-row: 5;
+.portfolio-imobiliario .portfolio-item:nth-child(3) {
+  grid-column: 1 / 4;
+  grid-row: 2;
   height: 250px;
+}
+
+.portfolio-imobiliario .portfolio-item:nth-child(4) {
+  grid-column: 4 / 7;
+  grid-row: 2;
+  height: 250px;
+}
+
+.portfolio-imobiliario .portfolio-item:nth-child(5) {
+  grid-column: 7 / 11;
+  grid-row: 2;
+  height: 250px;
+}
+
+.portfolio-imobiliario .portfolio-item:nth-child(6) {
+  grid-column: 1 / 11;
+  grid-row: 3;
+  height: 200px;
+}
+
+.portfolio-imobiliario .portfolio-item:nth-child(7) {
+  grid-column: 1 / 3;
+  grid-row: 4;
+  height: 200px;
+}
+
+.portfolio-imobiliario .portfolio-item:nth-child(8) {
+  grid-column: 3 / 6;
+  grid-row: 4;
+  height: 200px;
+}
+
+.portfolio-imobiliario .portfolio-item:nth-child(9) {
+  grid-column: 6 / 9;
+  grid-row: 4;
+  height: 200px;
+}
+
+.portfolio-imobiliario .portfolio-item:nth-child(10) {
+  grid-column: 9 / 11;
+  grid-row: 4;
+  height: 200px;
 }
 
 /* Botão de voltar */
@@ -360,7 +667,11 @@ body {
   background-color: var(--color-dark-gray);
 }
 
-/* Responsividade do portfolio */
+/* ===========================================
+   RESPONSIVIDADE ESPECÍFICA POR RAMO
+   =========================================== */
+
+/* Responsividade para 1200px - Todos os ramos */
 @media (max-width: 1200px) {
   .portfolio-container {
     width: 90vw;
@@ -370,47 +681,225 @@ body {
     grid-template-columns: repeat(8, 1fr);
   }
   
-  .portfolio-grid .portfolio-item:nth-child(1) {
+  /* ARQUITETURA - 1200px */
+  .portfolio-arquitetura .portfolio-item:nth-child(1) {
     grid-column: 1 / 9;
   }
   
-  .portfolio-grid .portfolio-item:nth-child(2) {
-    grid-column: 1 / 5;
+  .portfolio-arquitetura .portfolio-item:nth-child(2) {
+    grid-column: 1 / 7;
   }
   
-  .portfolio-grid .portfolio-item:nth-child(3) {
-    grid-column: 5 / 9;
+  .portfolio-arquitetura .portfolio-item:nth-child(3) {
+    grid-column: 7 / 9;
   }
   
-  .portfolio-grid .portfolio-item:nth-child(4) {
+  .portfolio-arquitetura .portfolio-item:nth-child(4) {
     grid-column: 1 / 3;
   }
   
-  .portfolio-grid .portfolio-item:nth-child(5) {
-    grid-column: 3 / 5;
+  .portfolio-arquitetura .portfolio-item:nth-child(5) {
+    grid-column: 3 / 9;
   }
   
-  .portfolio-grid .portfolio-item:nth-child(6) {
-    grid-column: 5 / 9;
+  .portfolio-arquitetura .portfolio-item:nth-child(6) {
+    grid-column: 1 / 9;
   }
   
-  .portfolio-grid .portfolio-item:nth-child(7) {
+  .portfolio-arquitetura .portfolio-item:nth-child(7) {
     grid-column: 1 / 4;
   }
   
-  .portfolio-grid .portfolio-item:nth-child(8) {
-    grid-column: 4 / 6;
+  .portfolio-arquitetura .portfolio-item:nth-child(8) {
+    grid-column: 4 / 9;
   }
   
-  .portfolio-grid .portfolio-item:nth-child(9) {
+  .portfolio-arquitetura .portfolio-item:nth-child(9) {
+    grid-column: 1 / 3;
+  }
+  
+  .portfolio-arquitetura .portfolio-item:nth-child(10) {
+    grid-column: 3 / 9;
+  }
+  
+  /* MODA - 1200px */
+  .portfolio-moda .portfolio-item:nth-child(1) {
+    grid-column: 1 / 5;
+  }
+  
+  .portfolio-moda .portfolio-item:nth-child(2) {
+    grid-column: 5 / 9;
+  }
+  
+  .portfolio-moda .portfolio-item:nth-child(3) {
+    grid-column: 1 / 3;
+  }
+  
+  .portfolio-moda .portfolio-item:nth-child(4) {
+    grid-column: 3 / 9;
+  }
+  
+  .portfolio-moda .portfolio-item:nth-child(5) {
+    grid-column: 1 / 7;
+  }
+  
+  .portfolio-moda .portfolio-item:nth-child(6) {
+    grid-column: 7 / 9;
+  }
+  
+  .portfolio-moda .portfolio-item:nth-child(7) {
+    grid-column: 1 / 3;
+  }
+  
+  .portfolio-moda .portfolio-item:nth-child(8) {
+    grid-column: 3 / 9;
+  }
+  
+  .portfolio-moda .portfolio-item:nth-child(9) {
+    grid-column: 1 / 5;
+  }
+  
+  .portfolio-moda .portfolio-item:nth-child(10) {
+    grid-column: 5 / 9;
+  }
+  
+  /* AUTOMOBILÍSTICO - 1200px */
+  .portfolio-automobilistico .portfolio-item:nth-child(1) {
+    grid-column: 1 / 9;
+  }
+  
+  .portfolio-automobilistico .portfolio-item:nth-child(2) {
+    grid-column: 1 / 3;
+  }
+  
+  .portfolio-automobilistico .portfolio-item:nth-child(3) {
+    grid-column: 3 / 9;
+  }
+  
+  .portfolio-automobilistico .portfolio-item:nth-child(4) {
+    grid-column: 1 / 6;
+  }
+  
+  .portfolio-automobilistico .portfolio-item:nth-child(5) {
+    grid-column: 6 / 9;
+  }
+
+  .portfolio-automobilistico .portfolio-item:nth-child(5) img {
+    object-position: 50% 35%;
+  }
+  
+  .portfolio-automobilistico .portfolio-item:nth-child(6) {
+    grid-column: 1 / 3;
+  }
+  
+  .portfolio-automobilistico .portfolio-item:nth-child(7) {
+    grid-column: 3 / 9;
+  }
+  
+  .portfolio-automobilistico .portfolio-item:nth-child(8) {
+    grid-column: 1 / 7;
+  }
+  
+  .portfolio-automobilistico .portfolio-item:nth-child(9) {
+    grid-column: 7 / 9;
+  }
+  
+  .portfolio-automobilistico .portfolio-item:nth-child(10) {
+    grid-column: 1 / 9;
+  }
+  
+  /* GASTRONOMIA - 1200px */
+  .portfolio-gastronomia .portfolio-item:nth-child(1) {
+    grid-column: 1 / 9;
+  }
+  
+  .portfolio-gastronomia .portfolio-item:nth-child(2) {
+    grid-column: 1 / 3;
+  }
+  
+  .portfolio-gastronomia .portfolio-item:nth-child(3) {
+    grid-column: 3 / 7;
+  }
+
+  .portfolio-gastronomia .portfolio-item:nth-child(3) img {
+    object-position: 50% 85%;
+  }
+  
+  .portfolio-gastronomia .portfolio-item:nth-child(4) {
+    grid-column: 7 / 9;
+  }
+  
+  .portfolio-gastronomia .portfolio-item:nth-child(5) {
+    grid-column: 1 / 4;
+  }
+  
+  .portfolio-gastronomia .portfolio-item:nth-child(6) {
+    grid-column: 4 / 9;
+  }
+
+  .portfolio-gastronomia .portfolio-item:nth-child(6) img {
+    object-position: 50% 65%;
+  }
+  
+  .portfolio-gastronomia .portfolio-item:nth-child(7) {
+    grid-column: 1 / 6;
+  }
+  
+  .portfolio-gastronomia .portfolio-item:nth-child(8) {
     grid-column: 6 / 9;
   }
   
-  .portfolio-grid .portfolio-item:nth-child(10) {
+  .portfolio-gastronomia .portfolio-item:nth-child(9) {
+    grid-column: 1 / 3;
+  }
+  
+  .portfolio-gastronomia .portfolio-item:nth-child(10) {
+    grid-column: 3 / 9;
+  }
+  
+  /* IMOBILIÁRIO - 1200px */
+  .portfolio-imobiliario .portfolio-item:nth-child(1) {
+    grid-column: 1 / 5;
+  }
+  
+  .portfolio-imobiliario .portfolio-item:nth-child(2) {
+    grid-column: 5 / 9;
+  }
+  
+  .portfolio-imobiliario .portfolio-item:nth-child(3) {
+    grid-column: 1 / 3;
+  }
+  
+  .portfolio-imobiliario .portfolio-item:nth-child(4) {
+    grid-column: 3 / 5;
+  }
+  
+  .portfolio-imobiliario .portfolio-item:nth-child(5) {
+    grid-column: 5 / 9;
+  }
+  
+  .portfolio-imobiliario .portfolio-item:nth-child(6) {
     grid-column: 1 / 9;
+  }
+  
+  .portfolio-imobiliario .portfolio-item:nth-child(7) {
+    grid-column: 1 / 3;
+  }
+  
+  .portfolio-imobiliario .portfolio-item:nth-child(8) {
+    grid-column: 3 / 5;
+  }
+  
+  .portfolio-imobiliario .portfolio-item:nth-child(9) {
+    grid-column: 5 / 7;
+  }
+  
+  .portfolio-imobiliario .portfolio-item:nth-child(10) {
+    grid-column: 7 / 9;
   }
 }
 
+/* Responsividade para 768px - Todos os ramos */
 @media (max-width: 768px) {
   .portfolio-container {
     width: 95vw;
@@ -425,57 +914,267 @@ body {
     grid-template-columns: repeat(6, 1fr);
   }
   
-  .portfolio-grid .portfolio-item:nth-child(1) {
+  /* ARQUITETURA - 768px */
+  .portfolio-arquitetura .portfolio-item:nth-child(1) {
     grid-column: 1 / 7;
+    height: 300px;
+  }
+  
+  .portfolio-arquitetura .portfolio-item:nth-child(2) {
+    grid-column: 1 / 5;
     height: 200px;
   }
   
-  .portfolio-grid .portfolio-item:nth-child(2) {
-    grid-column: 1 / 4;
-    height: 150px;
-  }
-  
-  .portfolio-grid .portfolio-item:nth-child(3) {
-    grid-column: 4 / 7;
-    height: 150px;
-  }
-  
-  .portfolio-grid .portfolio-item:nth-child(4) {
-    grid-column: 1 / 3;
-    height: 120px;
-  }
-  
-  .portfolio-grid .portfolio-item:nth-child(5) {
-    grid-column: 3 / 5;
-    height: 120px;
-  }
-  
-  .portfolio-grid .portfolio-item:nth-child(6) {
+  .portfolio-arquitetura .portfolio-item:nth-child(3) {
     grid-column: 5 / 7;
+    height: 200px;
+  }
+  
+  .portfolio-arquitetura .portfolio-item:nth-child(4) {
+    grid-column: 1 / 3;
+    height: 200px;
+  }
+  
+  .portfolio-arquitetura .portfolio-item:nth-child(5) {
+    grid-column: 3 / 7;
+    height: 200px;
+  }
+  
+  .portfolio-arquitetura .portfolio-item:nth-child(6) {
+    grid-column: 1 / 7;
+    height: 180px;
+  }
+  
+  .portfolio-arquitetura .portfolio-item:nth-child(7) {
+    grid-column: 1 / 5;
+    height: 300px;
+  }
+
+  .portfolio-arquitetura .portfolio-item:nth-child(7) img {
+    object-position: 50% 60%;
+  }
+  
+  .portfolio-arquitetura .portfolio-item:nth-child(8) {
+    grid-column: 5 / 7;
+    height: 300px;
+  }
+  
+  .portfolio-arquitetura .portfolio-item:nth-child(9) {
+    grid-column: 1 / 2;
+    height: 250px;
+  }
+  
+  .portfolio-arquitetura .portfolio-item:nth-child(10) {
+    grid-column: 2 / 7;
+    height: 250px;
+  }
+  
+  /* MODA - 768px */
+  .portfolio-moda .portfolio-item:nth-child(1) {
+    grid-column: 1 / 4;
+    height: 300px;
+  }
+  
+  .portfolio-moda .portfolio-item:nth-child(2) {
+    grid-column: 4 / 7;
+    height: 300px;
+  }
+  
+  .portfolio-moda .portfolio-item:nth-child(3) {
+    grid-column: 1 / 3;
+    height: 200px;
+  }
+  
+  .portfolio-moda .portfolio-item:nth-child(4) {
+    grid-column: 3 / 7;
+    height: 200px;
+  }
+  
+  .portfolio-moda .portfolio-item:nth-child(5) {
+    grid-column: 1 / 5;
+    height: 280px;
+  }
+  
+  .portfolio-moda .portfolio-item:nth-child(6) {
+    grid-column: 5 / 7;
+    height: 280px;
+  }
+  
+  .portfolio-moda .portfolio-item:nth-child(7) {
+    grid-column: 1 / 3;
+    height: 300px;
+  }
+  
+  .portfolio-moda .portfolio-item:nth-child(8) {
+    grid-column: 3 / 7;
+    height: 300px;
+  }
+  
+  .portfolio-moda .portfolio-item:nth-child(9) {
+    grid-column: 1 / 4;
+    height: 280px;
+  }
+  
+  .portfolio-moda .portfolio-item:nth-child(10) {
+    grid-column: 4 / 7;
+    height: 280px;
+  }
+  
+  /* AUTOMOBILÍSTICO - 768px */
+  .portfolio-automobilistico .portfolio-item:nth-child(1) {
+    grid-column: 1 / 7;
+    height: 350px;
+  }
+  
+  .portfolio-automobilistico .portfolio-item:nth-child(2) {
+    grid-column: 1 / 3;
+    height: 280px;
+  }
+  
+  .portfolio-automobilistico .portfolio-item:nth-child(3) {
+    grid-column: 3 / 7;
+    height: 280px;
+  }
+  
+  .portfolio-automobilistico .portfolio-item:nth-child(4) {
+    grid-column: 1 / 5;
+    height: 280px;
+  }
+  
+  .portfolio-automobilistico .portfolio-item:nth-child(5) {
+    grid-column: 5 / 7;
+    height: 280px;
+  }
+  
+  .portfolio-automobilistico .portfolio-item:nth-child(6) {
+    grid-column: 1 / 2;
+    height: 200px;
+  }
+  
+  .portfolio-automobilistico .portfolio-item:nth-child(7) {
+    grid-column: 2 / 7;
+    height: 200px;
+  }
+  
+  .portfolio-automobilistico .portfolio-item:nth-child(8) {
+    grid-column: 1 / 5;
+    height: 200px;
+  }
+  
+  .portfolio-automobilistico .portfolio-item:nth-child(9) {
+    grid-column: 5 / 7;
+    height: 200px;
+  }
+  
+  .portfolio-automobilistico .portfolio-item:nth-child(10) {
+    grid-column: 1 / 7;
+    height: 250px;
+  }
+  
+  /* GASTRONOMIA - 768px */
+  .portfolio-gastronomia .portfolio-item:nth-child(1) {
+    grid-column: 1 / 7;
+    height: 300px;
+  }
+  
+  .portfolio-gastronomia .portfolio-item:nth-child(2) {
+    grid-column: 1 / 2;
+    height: 200px;
+  }
+  
+  .portfolio-gastronomia .portfolio-item:nth-child(3) {
+    grid-column: 2 / 6;
+    height: 200px;
+  }
+  
+  .portfolio-gastronomia .portfolio-item:nth-child(4) {
+    grid-column: 6 / 7;
+    height: 200px;
+  }
+  
+  .portfolio-gastronomia .portfolio-item:nth-child(5) {
+    grid-column: 1 / 3;
+    height: 300px;
+  }
+  
+  .portfolio-gastronomia .portfolio-item:nth-child(6) {
+    grid-column: 3 / 7;
+    height: 300px;
+  }
+  
+  .portfolio-gastronomia .portfolio-item:nth-child(7) {
+    grid-column: 1 / 5;
+    height: 300px;
+  }
+  
+  .portfolio-gastronomia .portfolio-item:nth-child(8) {
+    grid-column: 5 / 7;
+    height: 300px;
+  }
+  
+  .portfolio-gastronomia .portfolio-item:nth-child(9) {
+    grid-column: 1 / 3;
+    height: 300px;
+  }
+  
+  .portfolio-gastronomia .portfolio-item:nth-child(10) {
+    grid-column: 3 / 7;
+    height: 300px;
+  }
+  
+  /* IMOBILIÁRIO - 768px */
+  .portfolio-imobiliario .portfolio-item:nth-child(1) {
+    grid-column: 1 / 4;
+    height: 200px;
+  }
+  
+  .portfolio-imobiliario .portfolio-item:nth-child(2) {
+    grid-column: 4 / 7;
+    height: 200px;
+  }
+  
+  .portfolio-imobiliario .portfolio-item:nth-child(3) {
+    grid-column: 1 / 3;
+    height: 150px;
+  }
+  
+  .portfolio-imobiliario .portfolio-item:nth-child(4) {
+    grid-column: 3 / 5;
+    height: 150px;
+  }
+  
+  .portfolio-imobiliario .portfolio-item:nth-child(5) {
+    grid-column: 5 / 7;
+    height: 150px;
+  }
+  
+  .portfolio-imobiliario .portfolio-item:nth-child(6) {
+    grid-column: 1 / 7;
     height: 120px;
   }
   
-  .portfolio-grid .portfolio-item:nth-child(7) {
-    grid-column: 1 / 4;
+  .portfolio-imobiliario .portfolio-item:nth-child(7) {
+    grid-column: 1 / 3;
     height: 100px;
   }
   
-  .portfolio-grid .portfolio-item:nth-child(8) {
-    grid-column: 4 / 7;
+  .portfolio-imobiliario .portfolio-item:nth-child(8) {
+    grid-column: 3 / 5;
     height: 100px;
   }
   
-  .portfolio-grid .portfolio-item:nth-child(9) {
-    grid-column: 1 / 7;
-    height: 150px;
+  .portfolio-imobiliario .portfolio-item:nth-child(9) {
+    grid-column: 5 / 7;
+    height: 100px;
   }
   
-  .portfolio-grid .portfolio-item:nth-child(10) {
+  .portfolio-imobiliario .portfolio-item:nth-child(10) {
     grid-column: 1 / 7;
-    height: 150px;
+    height: 120px;
   }
 }
 
+/* Responsividade para 480px - Todos os ramos */
 @media (max-width: 480px) {
   .portfolio-container {
     width: 100vw;
@@ -491,52 +1190,261 @@ body {
     grid-template-columns: repeat(4, 1fr);
   }
   
-  .portfolio-grid .portfolio-item:nth-child(1) {
+  /* ARQUITETURA - 480px */
+  .portfolio-arquitetura .portfolio-item:nth-child(1) {
     grid-column: 1 / 5;
+    height: 250px;
+  }
+  
+  .portfolio-arquitetura .portfolio-item:nth-child(2) {
+    grid-column: 1 / 4;
+    height: 200px;
+  }
+  
+  .portfolio-arquitetura .portfolio-item:nth-child(3) {
+    grid-column: 4 / 5;
+    height: 200px;
+  }
+  
+  .portfolio-arquitetura .portfolio-item:nth-child(4) {
+    grid-column: 1 / 2;
     height: 150px;
   }
   
-  .portfolio-grid .portfolio-item:nth-child(2) {
+  .portfolio-arquitetura .portfolio-item:nth-child(5) {
+    grid-column: 2 / 5;
+    height: 150px;
+  }
+  
+  .portfolio-arquitetura .portfolio-item:nth-child(6) {
+    grid-column: 1 / 5;
+    height: 120px;
+  }
+  
+  .portfolio-arquitetura .portfolio-item:nth-child(7) {
+    grid-column: 1 / 4;
+    height: 250px;
+  }
+
+  .portfolio-arquitetura .portfolio-item:nth-child(7) img {
+    object-position: 50% 60%;
+  }
+
+  .portfolio-arquitetura .portfolio-item:nth-child(8) {
+    grid-column: 4 / 5;
+    height: 250px;
+  }
+  
+  .portfolio-arquitetura .portfolio-item:nth-child(9) {
+    grid-column: 1 / 2;
+    height: 150px;
+  }
+  
+  .portfolio-arquitetura .portfolio-item:nth-child(10) {
+    grid-column: 2 / 5;
+    height: 150px;
+  }
+  
+  /* MODA - 480px */
+  .portfolio-moda .portfolio-item:nth-child(1) {
+    grid-column: 1 / 3;
+    height: 200px;
+  }
+  
+  .portfolio-moda .portfolio-item:nth-child(2) {
+    grid-column: 3 / 5;
+    height: 200px;
+  }
+  
+  .portfolio-moda .portfolio-item:nth-child(3) {
+    grid-column: 1 / 2;
+    height: 150px;
+  }
+  
+  .portfolio-moda .portfolio-item:nth-child(4) {
+    grid-column: 2 / 5;
+    height: 150px;
+  }
+  
+  .portfolio-moda .portfolio-item:nth-child(5) {
+    grid-column: 1 / 4;
+    height: 180px;
+  }
+  
+  .portfolio-moda .portfolio-item:nth-child(6) {
+    grid-column: 4 / 5;
+    height: 180px;
+  }
+  
+  .portfolio-moda .portfolio-item:nth-child(7) {
+    grid-column: 1 / 2;
+    height: 180px;
+  }
+  
+  .portfolio-moda .portfolio-item:nth-child(8) {
+    grid-column: 2 / 5;
+    height: 180px;
+  }
+  
+  .portfolio-moda .portfolio-item:nth-child(9) {
+    grid-column: 1 / 3;
+    height: 150px;
+  }
+  
+  .portfolio-moda .portfolio-item:nth-child(10) {
+    grid-column: 3 / 5;
+    height: 150px;
+  }
+  
+  /* AUTOMOBILÍSTICO - 480px */
+  .portfolio-automobilistico .portfolio-item:nth-child(1) {
+    grid-column: 1 / 5;
+    height: 250px;
+  }
+  
+  .portfolio-automobilistico .portfolio-item:nth-child(2) {
+    grid-column: 1 / 2;
+    height: 150px;
+  }
+  
+  .portfolio-automobilistico .portfolio-item:nth-child(3) {
+    grid-column: 2 / 5;
+    height: 150px;
+  }
+  
+  .portfolio-automobilistico .portfolio-item:nth-child(4) {
+    grid-column: 1 / 4;
+    height: 200px;
+  }
+  
+  .portfolio-automobilistico .portfolio-item:nth-child(5) {
+    grid-column: 4 / 5;
+    height: 200px;
+  }
+  
+  .portfolio-automobilistico .portfolio-item:nth-child(6) {
+    grid-column: 1 / 2;
+    height: 180px;
+  }
+  
+  .portfolio-automobilistico .portfolio-item:nth-child(7) {
+    grid-column: 2 / 5;
+    height: 180px;
+  }
+  
+  .portfolio-automobilistico .portfolio-item:nth-child(8) {
+    grid-column: 1 / 3;
+    height: 180px;
+  }
+  
+  .portfolio-automobilistico .portfolio-item:nth-child(9) {
+    grid-column: 3 / 5;
+    height: 180px;
+  }
+  
+  .portfolio-automobilistico .portfolio-item:nth-child(10) {
+    grid-column: 1 / 5;
+    height: 200px;
+  }
+  
+  /* GASTRONOMIA - 480px */
+  .portfolio-gastronomia .portfolio-item:nth-child(1) {
+    grid-column: 1 / 5;
+    height: 250px;
+  }
+  
+  .portfolio-gastronomia .portfolio-item:nth-child(2) {
+    grid-column: 1 / 2;
+    height: 200px;
+  }
+  
+  .portfolio-gastronomia .portfolio-item:nth-child(3) {
+    grid-column: 2 / 4;
+    height: 200px;
+  }
+  
+  .portfolio-gastronomia .portfolio-item:nth-child(4) {
+    grid-column: 4 / 5;
+    height: 200px;
+  }
+  
+  .portfolio-gastronomia .portfolio-item:nth-child(5) {
+    grid-column: 1 / 3;
+    height: 250px;
+  }
+  
+  .portfolio-gastronomia .portfolio-item:nth-child(6) {
+    grid-column: 3 / 5;
+    height: 250px;
+  }
+  
+  .portfolio-gastronomia .portfolio-item:nth-child(7) {
+    grid-column: 1 / 4;
+    height: 250px;
+  }
+  
+  .portfolio-gastronomia .portfolio-item:nth-child(8) {
+    grid-column: 4 / 5;
+    height: 250px;
+  }
+  
+  .portfolio-gastronomia .portfolio-item:nth-child(9) {
+    grid-column: 1 / 3;
+    height: 250px;
+  }
+  
+  .portfolio-gastronomia .portfolio-item:nth-child(10) {
+    grid-column: 3 / 5;
+    height: 250px;
+  }
+  
+  /* IMOBILIÁRIO - 480px */
+  .portfolio-imobiliario .portfolio-item:nth-child(1) {
+    grid-column: 1 / 3;
+    height: 150px;
+  }
+  
+  .portfolio-imobiliario .portfolio-item:nth-child(2) {
+    grid-column: 3 / 5;
+    height: 150px;
+  }
+  
+  .portfolio-imobiliario .portfolio-item:nth-child(3) {
     grid-column: 1 / 3;
     height: 100px;
   }
   
-  .portfolio-grid .portfolio-item:nth-child(3) {
+  .portfolio-imobiliario .portfolio-item:nth-child(4) {
     grid-column: 3 / 5;
     height: 100px;
   }
   
-  .portfolio-grid .portfolio-item:nth-child(4) {
-    grid-column: 1 / 3;
+  .portfolio-imobiliario .portfolio-item:nth-child(5) {
+    grid-column: 1 / 5;
     height: 80px;
   }
   
-  .portfolio-grid .portfolio-item:nth-child(5) {
-    grid-column: 3 / 5;
-    height: 80px;
-  }
-  
-  .portfolio-grid .portfolio-item:nth-child(6) {
+  .portfolio-imobiliario .portfolio-item:nth-child(6) {
     grid-column: 1 / 5;
     height: 100px;
   }
   
-  .portfolio-grid .portfolio-item:nth-child(7) {
+  .portfolio-imobiliario .portfolio-item:nth-child(7) {
     grid-column: 1 / 3;
     height: 80px;
   }
   
-  .portfolio-grid .portfolio-item:nth-child(8) {
+  .portfolio-imobiliario .portfolio-item:nth-child(8) {
     grid-column: 3 / 5;
     height: 80px;
   }
   
-  .portfolio-grid .portfolio-item:nth-child(9) {
+  .portfolio-imobiliario .portfolio-item:nth-child(9) {
     grid-column: 1 / 5;
     height: 100px;
   }
   
-  .portfolio-grid .portfolio-item:nth-child(10) {
+  .portfolio-imobiliario .portfolio-item:nth-child(10) {
     grid-column: 1 / 5;
     height: 100px;
   }

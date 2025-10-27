@@ -1,0 +1,314 @@
+/* ========================================
+   SOHO AGENCY - ANIMAÇÕES E MICROINTERAÇÕES
+   ======================================== */
+
+/* ========================================
+   1. SCROLL ANIMATIONS
+   ======================================== */
+
+/* Hero Section - Reveal Animation */
+.hero-title {
+    opacity: 0;
+    transform: translateY(50px);
+    animation: heroReveal 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.5s forwards;
+}
+
+@keyframes heroReveal {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* About Section - Staggered Image Animation */
+.about-image-item {
+    opacity: 0;
+    transform: translateX(-30px) rotate(-2deg);
+    transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.about-image-item[data-order="1"] { transition-delay: 0.1s; }
+.about-image-item[data-order="2"] { transition-delay: 0.3s; }
+.about-image-item[data-order="3"] { transition-delay: 0.5s; }
+.about-image-item[data-order="4"] { transition-delay: 0.7s; }
+
+.about-image-item.animate {
+    opacity: 1;
+    transform: translateX(0) rotate(0deg);
+}
+
+/* Services Section - Slide In from Sides */
+.services-left {
+    opacity: 0;
+    transform: translateX(-60px);
+    transition: all 1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.services-right {
+    opacity: 0;
+    transform: translateX(60px);
+    transition: all 1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.services-left.animate,
+.services-right.animate {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* Portfolio Videos - Scale & Fade */
+.video-item {
+    opacity: 0;
+    transform: scale(0.8);
+    transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.video-item.animate {
+    opacity: 1;
+    transform: scale(1);
+}
+
+/* Influencer Cards - Staggered Grid Animation */
+.influencer-card {
+    opacity: 0;
+    transform: translateY(40px) scale(0.95);
+    transition: all 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.influencer-card:nth-child(1) { transition-delay: 0.1s; }
+.influencer-card:nth-child(2) { transition-delay: 0.2s; }
+.influencer-card:nth-child(3) { transition-delay: 0.3s; }
+.influencer-card:nth-child(4) { transition-delay: 0.4s; }
+.influencer-card:nth-child(5) { transition-delay: 0.5s; }
+.influencer-card:nth-child(6) { transition-delay: 0.6s; }
+
+.influencer-card.animate {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+}
+
+/* Team Section Animation */
+.team-member {
+    opacity: 0;
+    transform: translateX(-20px);
+    transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.team-member.animate {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* ========================================
+   2. LOADING STATES
+   ======================================== */
+
+/* Page Load - Elegant Fade In */
+body {
+    opacity: 0;
+    animation: pageLoad 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+@keyframes pageLoad {
+    to { opacity: 1; }
+}
+
+/* Video Loading - Skeleton Placeholder */
+.hero-video::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, 
+        rgba(255,255,255,0.1) 25%, 
+        rgba(255,255,255,0.2) 50%, 
+        rgba(255,255,255,0.1) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 2s infinite;
+    z-index: 1;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.hero-video.loading::before {
+    opacity: 1;
+}
+
+@keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+}
+
+/* Form Submission Loading */
+.submit-btn {
+    position: relative;
+    overflow: hidden;
+}
+
+.submit-btn.loading {
+    pointer-events: none;
+    color: transparent;
+}
+
+.submit-btn.loading::after {
+    content: 'ENVIANDO...';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: var(--color-text-primary);
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 0.7; }
+    50% { opacity: 1; }
+}
+
+/* Image Loading - Progressive Reveal */
+.about-img,
+.influencer-image img {
+    opacity: 0;
+    transform: scale(1.1);
+    transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    filter: blur(5px);
+}
+
+.about-img.loaded,
+.influencer-image img.loaded {
+    opacity: 1;
+    transform: scale(1);
+    filter: blur(0);
+}
+
+/* ========================================
+   3. MICROINTERAÇÕES
+   ======================================== */
+
+/* Filter Buttons - REMOVIDO - hover personalizado mantido */
+
+/* Service Items - Magnetic Effect */
+.service-item {
+    position: relative;
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.service-item:hover {
+    transform: translateX(10px);
+    color: var(--color-green-primary);
+}
+
+.service-item .arrow {
+    transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.service-item:hover .arrow {
+    transform: translateX(5px);
+}
+
+/* About Button - Elegant Hover */
+.about-btn, .services-bottom-link {
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.about-btn:hover, .services-bottom-link:hover {
+    transform: translateX(5px);
+}
+
+/* .about-btn-arrow {
+    transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.about-btn:hover .about-btn-arrow {
+    transform: translateX(5px);
+} */
+
+/* Contact Form - Elegant Focus States */
+.contact-form input,
+.contact-form textarea {
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.contact-form input:focus,
+.contact-form textarea:focus {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+/* ========================================
+   4. CONTROLES DE ANIMAÇÃO
+   ======================================== */
+
+/* Classe para desabilitar todas as animações */
+.no-animations * {
+    animation: none !important;
+    transition: none !important;
+    transform: none !important;
+}
+
+/* Classe para desabilitar apenas scroll animations */
+.no-scroll-animations .about-image-item,
+.no-scroll-animations .services-left,
+.no-scroll-animations .services-right,
+.no-scroll-animations .video-item,
+.no-scroll-animations .influencer-card,
+.no-scroll-animations .team-member {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+}
+
+/* Classe para desabilitar apenas microinterações */
+.no-microinteractions .service-item:hover,
+.no-microinteractions .influencer-card:hover,
+.no-microinteractions .about-btn:hover,
+.no-microinteractions .contact-form input:focus,
+.no-microinteractions .contact-form textarea:focus {
+    transform: none !important;
+}
+
+/* ========================================
+   5. RESPONSIVIDADE
+   ======================================== */
+
+@media (max-width: 768px) {
+    /* Reduzir animações em mobile para melhor performance */
+    .influencer-card:hover {
+        transform: translateY(-5px) !important;
+    }
+    
+    .service-item:hover {
+        transform: translateX(5px);
+    }
+    
+    .about-image-item {
+        transition-duration: 0.5s;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    /* Desabilitar animações para usuários que preferem movimento reduzido */
+    .hero-title,
+    .about-image-item,
+    .services-left,
+    .services-right,
+    .video-item,
+    .influencer-card,
+    .team-member {
+        animation: none !important;
+        transition: none !important;
+        opacity: 1 !important;
+        transform: none !important;
+    }
+    
+    .service-item:hover,
+    .influencer-card:hover,
+    .about-btn:hover {
+        transform: none !important;
+    }
+}
+
