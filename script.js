@@ -249,6 +249,9 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Banners animation
     initializeBannersAnimation();
+    
+    // Lazy loading optimization
+    initializeLazyLoading();
 });
 
 // EmailJS Configuration
@@ -989,7 +992,7 @@ function createInfluencerPage(influencerKey) {
                                         </video>
                                     </div>
                                     <div class="portfolio-brand">
-                                        ${item.logo ? `<img src="${item.logo}" alt="${item.brand}" class="portfolio-brand-logo">` : item.brand}
+                                        ${item.logo ? `<img src="${item.logo}" alt="${item.brand}" class="portfolio-brand-logo" loading="lazy" decoding="async">` : item.brand}
                                     </div>
                                 </div>
                             `).join('')}
@@ -1181,5 +1184,91 @@ function initializeBannersAnimation() {
     // Start observing each banner individually
     bannerItems.forEach(banner => {
         observer.observe(banner);
+    });
+}
+
+// ===========================
+// LAZY LOADING OPTIMIZATION
+// ===========================
+
+// Initialize lazy loading optimization
+function initializeLazyLoading() {
+    // Enhanced lazy loading for images with better performance
+    const lazyImages = document.querySelectorAll('img[loading="lazy"]');
+    
+    if ('IntersectionObserver' in window) {
+        const imageObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const img = entry.target;
+                    
+                    // Add loading class for visual feedback
+                    img.classList.add('loading');
+                    
+                    // Preload the image
+                    const imageLoader = new Image();
+                    imageLoader.onload = function() {
+                        img.classList.remove('loading');
+                        img.classList.add('loaded');
+                    };
+                    imageLoader.onerror = function() {
+                        img.classList.remove('loading');
+                        img.classList.add('error');
+                        console.warn('Erro ao carregar imagem:', img.src);
+                    };
+                    imageLoader.src = img.src;
+                    
+                    // Stop observing this image
+                    observer.unobserve(img);
+                }
+            });
+        }, {
+            // Load images when they're 50px away from viewport
+            rootMargin: '50px 0px',
+            threshold: 0.01
+        });
+        
+        // Observe all lazy images
+        lazyImages.forEach(img => {
+            imageObserver.observe(img);
+        });
+    }
+    
+    // Preload critical images (eager loading)
+    const criticalImages = document.querySelectorAll('img[loading="eager"]');
+    criticalImages.forEach(img => {
+        if (!img.complete) {
+            img.classList.add('loading');
+            img.addEventListener('load', function() {
+                this.classList.remove('loading');
+                this.classList.add('loaded');
+            });
+            img.addEventListener('error', function() {
+                this.classList.remove('loading');
+                this.classList.add('error');
+            });
+        } else {
+            img.classList.add('loaded');
+        }
+    });
+    
+    // Optimize video loading
+    const videos = document.querySelectorAll('video');
+    videos.forEach(video => {
+        // Add preload="metadata" for better performance
+        if (!video.hasAttribute('preload')) {
+            video.setAttribute('preload', 'metadata');
+        }
+        
+        // Add loading state
+        video.classList.add('loading');
+        video.addEventListener('canplaythrough', function() {
+            this.classList.remove('loading');
+            this.classList.add('loaded');
+        });
+        video.addEventListener('error', function() {
+            this.classList.remove('loading');
+            this.classList.add('error');
+        });
     });
 } 

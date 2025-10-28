@@ -168,8 +168,10 @@ body {
 }
 
 /* Image Loading - Progressive Reveal */
-.about-img,
-.influencer-image img {
+/* .about-img,
+.influencer-image img,
+img[loading="lazy"],
+img[loading="eager"] {
     opacity: 0;
     transform: scale(1.1);
     transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
@@ -177,10 +179,46 @@ body {
 }
 
 .about-img.loaded,
-.influencer-image img.loaded {
+.influencer-image img.loaded,
+img.loaded {
     opacity: 1;
     transform: scale(1);
     filter: blur(0);
+} */
+
+/* Loading state for lazy images */
+img.loading {
+    opacity: 0.7;
+    filter: blur(2px);
+    background: linear-gradient(90deg, 
+        rgba(255,255,255,0.1) 25%, 
+        rgba(255,255,255,0.2) 50%, 
+        rgba(255,255,255,0.1) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 2s infinite;
+}
+
+/* Error state for failed images */
+img.error {
+    opacity: 0.5;
+    filter: grayscale(100%);
+}
+
+/* Video loading states */
+video.loading {
+    opacity: 0.7;
+    background: linear-gradient(90deg, 
+        transparent 25%, 
+        rgba(0,0,0,0.1) 50%, 
+        transparent 75%);
+    background-size: 200% 100%;
+    animation: shimmer 2s infinite;
+}
+
+video.loaded {
+    opacity: 1;
+    background: none;
+    animation: none;
 }
 
 /* ========================================
