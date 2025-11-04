@@ -47,24 +47,28 @@ Mensagem:
 
 ## Passo 5: Configurar no Site
 
-Após obter todas as informações, execute no console do navegador:
+Após obter todas as informações, edite o arquivo `script.js` e atualize o objeto `EMAILJS_CONFIG`:
+
+1. Abra o arquivo `script.js`
+2. Localize a constante `EMAILJS_CONFIG` (por volta da linha 225)
+3. Substitua os valores pelos seus IDs:
 
 ```javascript
-window.updateEmailJSConfig(
-    'SEU_SERVICE_ID',     // Service ID do passo 2
-    'SEU_TEMPLATE_ID',    // Template ID do passo 3
-    'SUA_PUBLIC_KEY'      // Public Key do passo 4
-);
+const EMAILJS_CONFIG = {
+    serviceId: 'SEU_SERVICE_ID',     // Service ID do passo 2
+    templateId: 'SEU_TEMPLATE_ID',   // Template ID do passo 3
+    publicKey: 'SUA_PUBLIC_KEY'      // Public Key do passo 4
+};
 ```
 
 ## Exemplo de Configuração
 
 ```javascript
-window.updateEmailJSConfig(
-    'service_abc123',
-    'template_xyz789',
-    'user_abc123def456'
-);
+const EMAILJS_CONFIG = {
+    serviceId: 'service_abc123',
+    templateId: 'template_xyz789',
+    publicKey: 'user_abc123def456'
+};
 ```
 
 ## Testar o Formulário
@@ -79,7 +83,7 @@ window.updateEmailJSConfig(
 
 - **Limite gratuito**: 200 emails/mês
 - **Planos pagos**: Disponíveis para mais volume
-- **Configuração persistente**: A configuração fica salva no navegador
+- **Configuração**: A configuração é feita diretamente no código
 - **Logs**: Verifique o console do navegador para debugar problemas
 
 ## Troubleshooting
@@ -96,3 +100,38 @@ Se o formulário não estiver funcionando:
 Para problemas específicos do EmailJS, consulte:
 - [Documentação oficial](https://www.emailjs.com/docs/)
 - [FAQ](https://www.emailjs.com/docs/faq/) 
+
+<!-- function initializeBannersAnimation() {
+        const bannersSection = document.querySelector('.ramos-banners');
+        if (!bannersSection) {
+            return; // Exit if not on produção de conteúdo page
+        }
+        
+        // Get all banner items except the first one (which stays static)
+        const bannerItems = bannersSection.querySelectorAll('.banner-item:not(:first-child)');
+        
+        if (bannerItems.length === 0) {
+            return;
+        }
+        
+        // Create intersection observer for individual banners
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    // Add animate class to the specific banner
+                    entry.target.classList.add('animate');
+                    
+                    // Unobserve after animation to prevent re-triggering
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, {
+            threshold: 0.1, // Trigger when 10% of the banner is visible
+            rootMargin: '0px 0px -50px 0px' // Start animation when banner is closer to viewport
+        });
+        
+        // Start observing each banner individually
+        bannerItems.forEach(banner => {
+            observer.observe(banner);
+        });
+    } -->

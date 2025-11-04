@@ -29,9 +29,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         
         link.addEventListener('click', function() {
-            mobileMenuToggle.classList.remove('active');
-            navMenu.classList.remove('active');
-            header.classList.remove('menu-open');
+            closeMobileMenu();
         });
     });
     
@@ -76,9 +74,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     header.classList.remove('dropdown-open');
                     
                     // Close mobile menu
-                    mobileMenuToggle.classList.remove('active');
-                    navMenu.classList.remove('active');
-                    header.classList.remove('menu-open');
+                    closeMobileMenu();
                     
                     // Allow the default link behavior to redirect to section
                     setTimeout(() => {
@@ -126,9 +122,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const isClickOnToggle = mobileMenuToggle.contains(event.target);
         
         if (!isClickInsideMenu && !isClickOnToggle && navMenu.classList.contains('active')) {
-            mobileMenuToggle.classList.remove('active');
-            navMenu.classList.remove('active');
-            header.classList.remove('menu-open');
+            closeMobileMenu();
         }
     });
     
@@ -181,17 +175,13 @@ document.addEventListener('DOMContentLoaded', function() {
         item.addEventListener('click', function() {
             const serviceType = this.getAttribute('data-service');
             
-            // Remove active class from all items and contents
-            serviceItems.forEach(serviceItem => {
-                serviceItem.classList.remove('active');
-            });
+            // Toggle active class on service items
+            toggleActiveClass(this, serviceItems);
             
+            // Toggle active class on service contents
             serviceContents.forEach(content => {
                 content.classList.remove('active');
             });
-            
-            // Add active class to clicked item
-            this.classList.add('active');
             
             // Add active class to corresponding content
             const targetContent = document.querySelector(`[data-content="${serviceType}"]`);
@@ -221,6 +211,9 @@ document.addEventListener('DOMContentLoaded', function() {
     // Banners animation
     initializeBannersAnimation();
     
+    // Portfolio functionality (produção de conteúdo page)
+    initializePortfolioFunctionality();
+    
     // Lazy loading optimization
     initializeLazyLoading();
     
@@ -230,7 +223,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // EmailJS Configuration
 const EMAILJS_CONFIG = {
-    // Estes valores serão fornecidos pelo usuário posteriormente
     serviceId: 'service_pfx1v5i',
     templateId: 'template_p0nldvc',
     publicKey: 'f2QRXEH2vrZFxZo08'
@@ -328,461 +320,474 @@ async function sendEmail(formData) {
     if (EMAILJS_CONFIG.serviceId === 'YOUR_SERVICE_ID' || 
         EMAILJS_CONFIG.templateId === 'YOUR_TEMPLATE_ID' || 
         EMAILJS_CONFIG.publicKey === 'YOUR_PUBLIC_KEY') {
-            
-            console.log('Dados do formulário (configuração EmailJS pendente):', formData);
-            
-            // Simulate success for now
-            return new Promise((resolve) => {
-                setTimeout(() => {
-                    resolve('Email enviado com sucesso (simulado)');
-                }, 1000);
-            });
-        }
         
-        // Send actual email
-        const response = await emailjs.send(
-            EMAILJS_CONFIG.serviceId,
-            EMAILJS_CONFIG.templateId,
-            {
-                from_name: formData.name,
-                from_email: formData.email,
-                service_type: formData.service,
-                message: formData.message,
-                timestamp: formData.timestamp
-            }
-        );
+        console.log('Dados do formulário (configuração EmailJS pendente):', formData);
         
-        return response;
-    }
-    
-    // Form validation
-    function validateForm(form) {
-        let isValid = true;
-        
-        const name = form.querySelector('#name');
-        const email = form.querySelector('#email');
-        const service = form.querySelector('input[name="service"]:checked');
-        const message = form.querySelector('#message');
-        
-        // Clear previous errors
-        clearAllErrors(form);
-        
-        // Validate name
-        if (!name.value.trim()) {
-            showFieldError(name, 'Por favor, informe seu nome');
-            isValid = false;
-        } else if (name.value.trim().length < 2) {
-            showFieldError(name, 'Nome deve ter pelo menos 2 caracteres');
-            isValid = false;
-        }
-        
-        // Validate email
-        if (!email.value.trim()) {
-            showFieldError(email, 'Por favor, informe seu email');
-            isValid = false;
-        } else if (!isValidEmail(email.value)) {
-            showFieldError(email, 'Por favor, informe um email válido');
-            isValid = false;
-        }
-        
-        // Validate service selection
-        if (!service) {
-            showFieldError(form.querySelector('.service-options'), 'Por favor, selecione um serviço');
-            isValid = false;
-        }
-        
-        // Validate message
-        if (!message.value.trim()) {
-            showFieldError(message, 'Por favor, deixe uma mensagem');
-            isValid = false;
-        } else if (message.value.trim().length < 10) {
-            showFieldError(message, 'Mensagem deve ter pelo menos 10 caracteres');
-            isValid = false;
-        }
-        
-        return isValid;
-    }
-    
-    // Validate individual field
-    function validateField(event) {
-        const field = event.target;
-        const value = field.value.trim();
-        
-        clearFieldError(field);
-        
-        switch (field.type) {
-            case 'text':
-            if (field.name === 'name' && value && value.length < 2) {
-                showFieldError(field, 'Nome deve ter pelo menos 2 caracteres');
-            }
-            break;
-            case 'email':
-            if (value && !isValidEmail(value)) {
-                showFieldError(field, 'Por favor, informe um email válido');
-            }
-            break;
-            case 'textarea':
-            if (value && value.length < 10) {
-                showFieldError(field, 'Mensagem deve ter pelo menos 10 caracteres');
-            }
-            break;
-        }
-    }
-    
-    // Email validation
-    function isValidEmail(email) {
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return emailRegex.test(email);
-    }
-    
-    // Show field error
-    function showFieldError(field, message) {
-        clearFieldError(field);
-        
-        const errorDiv = document.createElement('div');
-        errorDiv.className = 'field-error';
-        errorDiv.textContent = message;
-        errorDiv.style.color = '#e74c3c';
-        errorDiv.style.fontSize = '0.8rem';
-        errorDiv.style.marginTop = '0.5rem';
-        
-        field.parentNode.appendChild(errorDiv);
-        field.style.borderBottomColor = '#e74c3c';
-    }
-    
-    // Clear field error
-    function clearFieldError(field) {
-        const errorDiv = field.parentNode.querySelector('.field-error');
-        if (errorDiv) {
-            errorDiv.remove();
-        }
-        field.style.borderBottomColor = '#000';
-    }
-    
-    // Clear all errors
-    function clearAllErrors(form) {
-        const errors = form.querySelectorAll('.field-error');
-        errors.forEach(error => error.remove());
-        
-        const fields = form.querySelectorAll('input, textarea');
-        fields.forEach(field => {
-            field.style.borderBottomColor = '#000';
+        // Simulate success for now
+        return new Promise((resolve) => {
+            setTimeout(() => {
+                resolve('Email enviado com sucesso (simulado)');
+            }, 1000);
         });
     }
     
-    // Show success/error message
-    function showMessage(text, type) {
-        // Remove existing messages
-        const existingMessage = document.querySelector('.form-message');
-        if (existingMessage) {
-            existingMessage.remove();
+    // Send actual email
+    const response = await emailjs.send(
+        EMAILJS_CONFIG.serviceId,
+        EMAILJS_CONFIG.templateId,
+        {
+            from_name: formData.name,
+            from_email: formData.email,
+            service_type: formData.service,
+            message: formData.message,
+            timestamp: formData.timestamp
         }
-        
-        const messageDiv = document.createElement('div');
-        messageDiv.className = `form-message ${type}`;
-        messageDiv.textContent = text;
-        
-        const contactForm = document.getElementById('contact-form');
-        contactForm.appendChild(messageDiv);
-        
-        // Auto-remove message after 5 seconds
-        setTimeout(() => {
-            if (messageDiv.parentNode) {
-                messageDiv.remove();
-            }
-        }, 5000);
+    );
+    
+    return response;
+}
+
+// Form validation
+function validateForm(form) {
+    let isValid = true;
+    
+    const name = form.querySelector('#name');
+    const email = form.querySelector('#email');
+    const service = form.querySelector('input[name="service"]:checked');
+    const message = form.querySelector('#message');
+    
+    // Clear previous errors
+    clearAllErrors(form);
+    
+    // Validate name
+    if (!name.value.trim()) {
+        showFieldError(name, 'Por favor, informe seu nome');
+        isValid = false;
+    } else if (name.value.trim().length < 2) {
+        showFieldError(name, 'Nome deve ter pelo menos 2 caracteres');
+        isValid = false;
     }
     
-    // Export functions for EmailJS configuration
-    window.updateEmailJSConfig = function(serviceId, templateId, publicKey) {
-        EMAILJS_CONFIG.serviceId = serviceId;
-        EMAILJS_CONFIG.templateId = templateId;
-        EMAILJS_CONFIG.publicKey = publicKey;
-        
-        // Re-initialize EmailJS with new config
-        initializeEmailJS();
-        
-        console.log('EmailJS configurado com sucesso!');
-    };
+    // Validate email
+    if (!email.value.trim()) {
+        showFieldError(email, 'Por favor, informe seu email');
+        isValid = false;
+    } else if (!isValidEmail(email.value)) {
+        showFieldError(email, 'Por favor, informe um email válido');
+        isValid = false;
+    }
     
-    // ===========================
-    // ABOUT SECTION ANIMATION
-    // ===========================
+    // Validate service selection
+    if (!service) {
+        showFieldError(form.querySelector('.service-options'), 'Por favor, selecione um serviço');
+        isValid = false;
+    }
     
-    function initializeAboutAnimation() {
-        const aboutImages = document.querySelector('.about-images');
-        
-        if (!aboutImages) return;
-        
-        // Configuração do Intersection Observer
-        const observerOptions = {
-            threshold: 0.3, // Ativa quando 30% da seção estiver visível
-            rootMargin: '-50px 0px -50px 0px' // Margem para ativar um pouco antes
-        };
-        
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    // Adiciona a classe animate para iniciar a animação
-                    aboutImages.classList.add('animate');
-                    
-                    // Remove o observer após a primeira ativação
+    // Validate message
+    if (!message.value.trim()) {
+        showFieldError(message, 'Por favor, deixe uma mensagem');
+        isValid = false;
+    } else if (message.value.trim().length < 10) {
+        showFieldError(message, 'Mensagem deve ter pelo menos 10 caracteres');
+        isValid = false;
+    }
+    
+    return isValid;
+}
+
+// Validate individual field
+function validateField(event) {
+    const field = event.target;
+    const value = field.value.trim();
+    
+    clearFieldError(field);
+    
+    switch (field.type) {
+        case 'text':
+        if (field.name === 'name' && value && value.length < 2) {
+            showFieldError(field, 'Nome deve ter pelo menos 2 caracteres');
+        }
+        break;
+        case 'email':
+        if (value && !isValidEmail(value)) {
+            showFieldError(field, 'Por favor, informe um email válido');
+        }
+        break;
+        case 'textarea':
+        if (value && value.length < 10) {
+            showFieldError(field, 'Mensagem deve ter pelo menos 10 caracteres');
+        }
+        break;
+    }
+}
+
+// Email validation
+function isValidEmail(email) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+}
+
+// Show field error
+function showFieldError(field, message) {
+    clearFieldError(field);
+    
+    const errorDiv = document.createElement('div');
+    errorDiv.className = 'field-error';
+    errorDiv.textContent = message;
+    errorDiv.style.color = '#e74c3c';
+    errorDiv.style.fontSize = '0.8rem';
+    errorDiv.style.marginTop = '0.5rem';
+    
+    field.parentNode.appendChild(errorDiv);
+    field.style.borderBottomColor = '#e74c3c';
+}
+
+// Clear field error
+function clearFieldError(field) {
+    const errorDiv = field.parentNode.querySelector('.field-error');
+    if (errorDiv) {
+        errorDiv.remove();
+    }
+    field.style.borderBottomColor = '#000';
+}
+
+// Clear all errors
+function clearAllErrors(form) {
+    const errors = form.querySelectorAll('.field-error');
+    errors.forEach(error => error.remove());
+    
+    const fields = form.querySelectorAll('input, textarea');
+    fields.forEach(field => {
+        field.style.borderBottomColor = '#000';
+    });
+}
+
+// Show success/error message
+function showMessage(text, type) {
+    // Remove existing messages
+    const existingMessage = document.querySelector('.form-message');
+    if (existingMessage) {
+        existingMessage.remove();
+    }
+    
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `form-message ${type}`;
+    messageDiv.textContent = text;
+    
+    const contactForm = document.getElementById('contact-form');
+    contactForm.appendChild(messageDiv);
+    
+    // Auto-remove message after 5 seconds
+    setTimeout(() => {
+        if (messageDiv.parentNode) {
+            messageDiv.remove();
+        }
+    }, 5000);
+};
+
+// ===========================
+// UTILITY FUNCTIONS
+// ===========================
+
+// Função utilitária para toggle de classe 'active' em elementos
+function toggleActiveClass(clickedElement, allElements, callback = null) {
+    // Remove active de todos os elementos
+    allElements.forEach(element => element.classList.remove('active'));
+    // Adiciona active ao elemento clicado
+    clickedElement.classList.add('active');
+    // Executa callback se fornecido
+    if (callback && typeof callback === 'function') {
+        callback(clickedElement);
+    }
+}
+
+// Função utilitária para fechar menu mobile
+function closeMobileMenu() {
+    const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+    const navMenu = document.getElementById('nav-menu');
+    const header = document.getElementById('header');
+    
+    if (mobileMenuToggle) mobileMenuToggle.classList.remove('active');
+    if (navMenu) navMenu.classList.remove('active');
+    if (header) header.classList.remove('menu-open');
+}
+
+// ===========================
+// UTILITY: ANIMATION OBSERVER
+// ===========================
+
+// Função utilitária reutilizável para criar IntersectionObserver para animações
+function createAnimationObserver(options = {}) {
+    const {
+        selector, // Elemento ou seletor a observar
+        targetSelector, // Elemento alvo para adicionar classe (opcional, usa selector se não fornecido)
+        className = 'animate', // Classe CSS a adicionar
+        threshold = 0.3,
+        rootMargin = '0px 0px -50px 0px',
+        unobserveAfterTrigger = true // Se deve parar de observar após trigger
+    } = options;
+    
+    const element = typeof selector === 'string' ? document.querySelector(selector) : selector;
+    const targetElement = targetSelector ? 
+        (typeof targetSelector === 'string' ? document.querySelector(targetSelector) : targetSelector) : 
+        element;
+    
+    if (!element || !targetElement) return null;
+    
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                targetElement.classList.add(className);
+                if (unobserveAfterTrigger) {
                     observer.unobserve(entry.target);
                 }
-            });
-        }, observerOptions);
-        
-        // Observa a seção about
-        const aboutSection = document.querySelector('#sobre');
-        if (aboutSection) {
-            observer.observe(aboutSection);
-        }
+            }
+        });
+    }, { threshold, rootMargin });
+    
+    observer.observe(element);
+    return observer;
+}
+
+// ===========================
+// ABOUT SECTION ANIMATION
+// ===========================
+
+function initializeAboutAnimation() {
+    const aboutImages = document.querySelector('.about-images');
+    if (!aboutImages) return;
+    
+    createAnimationObserver({
+        selector: '#sobre',
+        targetSelector: aboutImages,
+        threshold: 0.3,
+        rootMargin: '-50px 0px -50px 0px'
+    });
+}
+
+// Inicializa a animação da seção about quando o DOM estiver carregado
+document.addEventListener('DOMContentLoaded', initializeAboutAnimation);
+
+// ===========================
+// TEAM SECTION FUNCTIONALITY
+// ===========================
+
+// Team members data
+const teamMembers = {
+    paloma: {
+        name: 'Paloma Viana',
+        role: 'Diretora de Criação',
+        photo: 'assets/Paloma_Viana.jpg'
+    },
+    gabriella: {
+        name: 'Gabriella Almeida',
+        role: 'Diretora de Planejamento',
+        photo: 'assets/Gabriella_Almeida.jpg'
+    },
+    clara: {
+        name: 'Clara Kersh',
+        role: 'Atendimento',
+        photo: 'assets/Clara_kersh.jpg'
+    },
+    milena: {
+        name: 'Milena Araújo',
+        role: 'Produtora Audiovisual',
+        photo: 'assets/Milena_Araujo.jpg'
+    },
+    hiago: {
+        name: 'Hiago Azevedo',
+        role: 'Diretor de Produção Criativa',
+        photo: 'assets/placeholder.jpg' // Placeholder para foto não disponível
+    },
+};
+
+// Initialize team section functionality
+function initializeTeamSection() {
+    const teamMembersList = document.querySelectorAll('.team-member');
+    const memberPhoto = document.getElementById('member-photo');
+    const memberName = document.getElementById('member-name');
+    const memberRole = document.getElementById('member-role');
+    
+    if (!teamMembersList.length || !memberPhoto || !memberName || !memberRole) {
+        return; // Exit if elements not found
     }
     
-    // Inicializa a animação da seção about quando o DOM estiver carregado
-    document.addEventListener('DOMContentLoaded', initializeAboutAnimation);
-    
-    // ===========================
-    // TEAM SECTION FUNCTIONALITY
-    // ===========================
-    
-    // Team members data
-    const teamMembers = {
-        paloma: {
-            name: 'Paloma Viana',
-            role: 'Diretora de Criação',
-            photo: 'assets/Paloma_Viana.jpg'
-        },
-        gabriella: {
-            name: 'Gabriella Almeida',
-            role: 'Diretora de Planejamento',
-            photo: 'assets/Gabriella_Almeida.jpg'
-        },
-        clara: {
-            name: 'Clara Kersh',
-            role: 'Atendimento',
-            photo: 'assets/Clara_kersh.jpg'
-        },
-        milena: {
-            name: 'Milena Araújo',
-            role: 'Produtora Audiovisual',
-            photo: 'assets/Milena_Araujo.jpg'
-        },
-        hiago: {
-            name: 'Hiago Azevedo',
-            role: 'Diretor de Produção Criativa',
-            photo: 'assets/placeholder.jpg' // Placeholder para foto não disponível
-        },
-    };
-    
-    // Initialize team section functionality
-    function initializeTeamSection() {
-        const teamMembersList = document.querySelectorAll('.team-member');
-        const memberPhoto = document.getElementById('member-photo');
-        const memberName = document.getElementById('member-name');
-        const memberRole = document.getElementById('member-role');
-        
-        if (!teamMembersList.length || !memberPhoto || !memberName || !memberRole) {
-            return; // Exit if elements not found
-        }
-        
-        // Add click event listeners to team members
-        teamMembersList.forEach(member => {
-            member.addEventListener('click', function() {
-                const memberId = this.getAttribute('data-member');
-                
-                // Remove active class from all members
-                teamMembersList.forEach(m => m.classList.remove('active'));
-                
-                // Add active class to clicked member
-                this.classList.add('active');
-                
-                // Update display with selected member data
+    // Add click event listeners to team members
+    teamMembersList.forEach(member => {
+        member.addEventListener('click', function() {
+            const memberId = this.getAttribute('data-member');
+            
+            // Toggle active class and update display
+            toggleActiveClass(this, teamMembersList, () => {
                 updateMemberDisplay(memberId);
             });
         });
+    });
+}
+
+// Update member display
+function updateMemberDisplay(memberId) {
+    const memberData = teamMembers[memberId];
+    const memberPhoto = document.getElementById('member-photo');
+    const memberName = document.getElementById('member-name');
+    const memberRole = document.getElementById('member-role');
+    
+    if (!memberData || !memberPhoto || !memberName || !memberRole) {
+        return;
     }
     
-    // Update member display
-    function updateMemberDisplay(memberId) {
-        const memberData = teamMembers[memberId];
-        const memberPhoto = document.getElementById('member-photo');
-        const memberName = document.getElementById('member-name');
-        const memberRole = document.getElementById('member-role');
-        
-        if (!memberData || !memberPhoto || !memberName || !memberRole) {
-            return;
-        }
-        
-        // Update photo
-        memberPhoto.src = memberData.photo;
-        memberPhoto.alt = memberData.name;
-        
-        // Update name and role
-        memberName.textContent = memberData.name;
-        memberRole.textContent = memberData.role;
-        
-        // Add loading state for photo
-        memberPhoto.style.opacity = '0.7';
-        memberPhoto.onload = function() {
-            this.style.opacity = '1';
-        };
-        
-        // Handle photo load error (for placeholder images)
-        memberPhoto.onerror = function() {
-            this.style.opacity = '0.5';
-            // You could set a default placeholder image here
-        };
+    // Update photo
+    memberPhoto.src = memberData.photo;
+    memberPhoto.alt = memberData.name;
+    
+    // Update name and role
+    memberName.textContent = memberData.name;
+    memberRole.textContent = memberData.role;
+    
+    // Add loading state for photo
+    memberPhoto.style.opacity = '0.7';
+    memberPhoto.onload = function() {
+        this.style.opacity = '1';
+    };
+    
+    // Handle photo load error (for placeholder images)
+    memberPhoto.onerror = function() {
+        this.style.opacity = '0.5';
+    };
+}
+
+// ===========================
+// AGENCIAMENTO FILTERS FUNCTIONALITY
+// ===========================
+
+// Initialize agenciamento filters
+function initializeAgenciamentoFilters() {
+    const filterOptions = document.querySelectorAll('.filter-option');
+    const influencerCards = document.querySelectorAll('.influencer-card');
+    const filterSelected = document.querySelector('.filter-selected');
+    const filterDropdown = document.querySelector('.filter-dropdown');
+    const filterReset = document.getElementById('filter-reset');
+    
+    if (!filterOptions.length || !influencerCards.length) {
+        return; // Exit if elements not found
     }
     
-    // ===========================
-    // AGENCIAMENTO FILTERS FUNCTIONALITY
-    // ===========================
-    
-    // Initialize agenciamento filters
-    function initializeAgenciamentoFilters() {
-        const filterOptions = document.querySelectorAll('.filter-option');
-        const influencerCards = document.querySelectorAll('.influencer-card');
-        const filterSelected = document.querySelector('.filter-selected');
-        const filterDropdown = document.querySelector('.filter-dropdown');
-        const filterReset = document.getElementById('filter-reset');
-        
-        if (!filterOptions.length || !influencerCards.length) {
-            return; // Exit if elements not found
-        }
-        
-        // Add click event listeners to filter options
-        filterOptions.forEach(option => {
-            option.addEventListener('click', function() {
-                const filterValue = this.getAttribute('data-filter');
-                
-                // Remove active class from all options
-                filterOptions.forEach(opt => opt.classList.remove('active'));
-                
-                // Add active class to clicked option
-                this.classList.add('active');
-                
+    // Add click event listeners to filter options
+    filterOptions.forEach(option => {
+        option.addEventListener('click', function() {
+            const filterValue = this.getAttribute('data-filter');
+            
+            // Toggle active class on filter options
+            toggleActiveClass(this, filterOptions, () => {
                 // Update selected filter display
                 if (filterSelected) {
                     filterSelected.textContent = this.textContent;
                 }
-                
                 // Filter influencer cards
                 filterInfluencers(filterValue, influencerCards);
             });
         });
-        
-        // Add click event listener to reset button
-        if (filterReset) {
-            filterReset.addEventListener('click', function() {
-                // Remove active class from all filter options
-                filterOptions.forEach(opt => opt.classList.remove('active'));
-                
-                // Set first option (LIFESTYLE) as active
-                const firstOption = filterOptions[0];
-                if (firstOption) {
-                    firstOption.classList.add('active');
-                }
-                
-                // Update selected filter display
-                if (filterSelected) {
-                    filterSelected.textContent = 'LIFESTYLE';
-                }
-                
-                // Show all influencer cards
-                showAllInfluencers(influencerCards);
-            });
-        }
-        
-        // Add click event listener to dropdown
-        if (filterDropdown) {
-            filterDropdown.addEventListener('click', function() {
-                // Toggle dropdown functionality could be added here
-                console.log('Dropdown clicked');
-            });
-        }
-    }
+    });
     
-    // Filter influencers based on selected category
-    function filterInfluencers(selectedFilter, cards) {
-        const gallery = document.querySelector('.influencers-gallery');
+    // Add click event listener to reset button
+    if (filterReset) {
+        filterReset.addEventListener('click', function() {
+            // Set first option (LIFESTYLE) as active
+            const firstOption = filterOptions[0];
+            if (firstOption) {
+                toggleActiveClass(firstOption, filterOptions, () => {
+                    // Update selected filter display
+                    if (filterSelected) {
+                        filterSelected.textContent = 'LIFESTYLE';
+                    }
+                    // Show all influencer cards
+                    showAllInfluencers(influencerCards);
+                });
+            }
+        });
+    }
+}
+
+// Filter influencers based on selected category
+function filterInfluencers(selectedFilter, cards) {
+    const gallery = document.querySelector('.influencers-gallery');
+    
+    // First, hide all cards with animation
+    cards.forEach(card => {
+        card.style.opacity = '0';
+        card.style.transform = 'scale(0.8)';
+    });
+    
+    // After animation, reorganize DOM
+    setTimeout(() => {
+        const visibleCards = [];
+        const hiddenCards = [];
         
-        // First, hide all cards with animation
+        // Separate cards into visible and hidden arrays
         cards.forEach(card => {
-            card.style.opacity = '0';
-            card.style.transform = 'scale(0.8)';
+            const categories = card.getAttribute('data-categories');
+            const categoryArray = categories ? categories.split(',') : [];
+            
+            // Check if the card has the selected filter category
+            const hasCategory = categoryArray.includes(selectedFilter);
+            
+            if (hasCategory) {
+                visibleCards.push(card);
+            } else {
+                hiddenCards.push(card);
+            }
         });
         
-        // After animation, reorganize DOM
-        setTimeout(() => {
-            const visibleCards = [];
-            const hiddenCards = [];
-            
-            // Separate cards into visible and hidden arrays
-            cards.forEach(card => {
-                const categories = card.getAttribute('data-categories');
-                const categoryArray = categories ? categories.split(',') : [];
-                
-                // Check if the card has the selected filter category
-                const hasCategory = categoryArray.includes(selectedFilter);
-                
-                if (hasCategory) {
-                    visibleCards.push(card);
-                } else {
-                    hiddenCards.push(card);
-                }
-            });
-            
-            // Clear gallery
-            gallery.innerHTML = '';
-            
-            // Add visible cards first
-            visibleCards.forEach(card => {
-                card.classList.remove('hidden');
-                card.style.display = 'block';
-                card.style.opacity = '1';
-                card.style.transform = 'scale(1)';
-                gallery.appendChild(card);
-            });
-            
-            // Add hidden cards at the end (completely hidden)
-            hiddenCards.forEach(card => {
-                card.classList.add('hidden');
-                card.style.display = 'none';
-                card.style.opacity = '0';
-                card.style.transform = 'scale(0.8)';
-                gallery.appendChild(card);
-            });
-        }, 300);
-    }
-    
-    // Show all influencers (reset function)
-    function showAllInfluencers(cards) {
-        const gallery = document.querySelector('.influencers-gallery');
+        // Clear gallery
+        gallery.innerHTML = '';
         
-        // Reset to original order
-        setTimeout(() => {
-            // Clear gallery
-            gallery.innerHTML = '';
-            
-            // Add all cards back in original order
-            cards.forEach(card => {
-                card.classList.remove('hidden');
-                card.style.display = 'block';
-                card.style.opacity = '1';
-                card.style.transform = 'scale(1)';
-                gallery.appendChild(card);
-            });
-        }, 100);
-    }
+        // Add visible cards first
+        visibleCards.forEach(card => {
+            card.classList.remove('hidden');
+            card.style.display = 'block';
+            card.style.opacity = '1';
+            card.style.transform = 'scale(1)';
+            gallery.appendChild(card);
+        });
+        
+        // Add hidden cards at the end (completely hidden)
+        hiddenCards.forEach(card => {
+            card.classList.add('hidden');
+            card.style.display = 'none';
+            card.style.opacity = '0';
+            card.style.transform = 'scale(0.8)';
+            gallery.appendChild(card);
+        });
+    }, 300);
+}
+
+// Show all influencers (reset function)
+function showAllInfluencers(cards) {
+    const gallery = document.querySelector('.influencers-gallery');
     
-    // ===========================
-    // INFLUENCER CLICK FUNCTIONALITY
-    // ===========================
-    
-    // Influencer data
-    const influencerData = {
-        'luiza-machado': {
+    // Reset to original order
+    setTimeout(() => {
+        // Clear gallery
+        gallery.innerHTML = '';
+        
+        // Add all cards back in original order
+        cards.forEach(card => {
+            card.classList.remove('hidden');
+            card.style.display = 'block';
+            card.style.opacity = '1';
+            card.style.transform = 'scale(1)';
+            gallery.appendChild(card);
+        });
+    }, 100);
+}
+
+// ===========================
+// INFLUENCER CLICK FUNCTIONALITY
+// ===========================
+
+// Influencer data
+const influencerData = {
+    'luiza-machado': {
             name: 'Luiza Machado',
             handle: '@luizamachadop',
             followers: '27.8k',
@@ -854,10 +859,10 @@ async function sendEmail(formData) {
             description: 'Gabriela Medeiros é uma criadora de conteúdo especializada em beleza e fitness. Com sua abordagem autêntica e conhecimento técnico, ela produz conteúdos educativos que inspiram sua audiência a cuidar da saúde e bem-estar de forma equilibrada e sustentável.',
             mainVideo: 'assets/agenciamento/portfolio-gabriela-medeiros/Principal.mov',
             portfolio: [
-                { video: 'assets/agenciamento/portfolio-gabriela-medeiros/Video1.mp4', brand: 'Marca A', logo: 'assets/agenciamento/logos-marcas/marca-a.png' },
-                { video: 'assets/agenciamento/portfolio-gabriela-medeiros/Video2.mp4', brand: 'Marca B', logo: 'assets/agenciamento/logos-marcas/marca-b.png' },
-                { video: 'assets/agenciamento/portfolio-gabriela-medeiros/Video3.mp4', brand: 'Marca C', logo: 'assets/agenciamento/logos-marcas/marca-c.png' },
-                { video: 'assets/agenciamento/portfolio-gabriela-medeiros/Video4.mp4', brand: 'Marca D', logo: 'assets/agenciamento/logos-marcas/marca-d.png' }
+                { video: 'assets/agenciamento/portfolio-gabriela-medeiros/boticario.mp4', brand: 'O boticário', logo: 'assets/agenciamento/logos-marcas/logo-boticario.png' },
+                { video: 'assets/agenciamento/portfolio-gabriela-medeiros/brae.mp4', brand: 'Braé', logo: 'assets/agenciamento/logos-marcas/logo-brae.webp' },
+                // { video: 'assets/agenciamento/portfolio-gabriela-medeiros/Video3.mp4', brand: 'Marca C', logo: 'assets/agenciamento/logos-marcas/marca-c.png' },
+                // { video: 'assets/agenciamento/portfolio-gabriela-medeiros/Video4.mp4', brand: 'Marca D', logo: 'assets/agenciamento/logos-marcas/marca-d.png' }
             ]
         }
     };
@@ -1094,30 +1099,11 @@ async function sendEmail(formData) {
     
     // Initialize statistics section animation
     function initializeStatisticsAnimation() {
-        const statisticsSection = document.querySelector('.statistics-section');
-        
-        if (!statisticsSection) {
-            return; // Exit if not on sobre page
-        }
-        
-        // Create intersection observer
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    // Add animate class when section comes into view
-                    entry.target.classList.add('animate');
-                    
-                    // Unobserve after animation to prevent re-triggering
-                    observer.unobserve(entry.target);
-                }
-            });
-        }, {
-            threshold: 0.3, // Trigger when 30% of the section is visible
-            rootMargin: '0px 0px -50px 0px' // Start animation slightly before section is fully visible
+        createAnimationObserver({
+            selector: '.statistics-section',
+            threshold: 0.3,
+            rootMargin: '0px 0px -50px 0px'
         });
-        
-        // Start observing the statistics section
-        observer.observe(statisticsSection);
     }
     
     // ===========================
@@ -1127,39 +1113,159 @@ async function sendEmail(formData) {
     // Initialize banners animation
     function initializeBannersAnimation() {
         const bannersSection = document.querySelector('.ramos-banners');
+        if (!bannersSection) return;
         
-        if (!bannersSection) {
-            return; // Exit if not on produção de conteúdo page
-        }
-        
-        // Get all banner items except the first one (which stays static)
         const bannerItems = bannersSection.querySelectorAll('.banner-item:not(:first-child)');
+        if (bannerItems.length === 0) return;
         
-        if (bannerItems.length === 0) {
-            return;
-        }
-        
-        // Create intersection observer for individual banners
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    // Add animate class to the specific banner
-                    entry.target.classList.add('animate');
-                    
-                    // Unobserve after animation to prevent re-triggering
-                    observer.unobserve(entry.target);
-                }
-            });
-        }, {
-            threshold: 0.1, // Trigger when 10% of the banner is visible
-            rootMargin: '0px 0px -50px 0px' // Start animation when banner is closer to viewport
-        });
-        
-        // Start observing each banner individually
+        // Observar cada banner individualmente
         bannerItems.forEach(banner => {
-            observer.observe(banner);
+            createAnimationObserver({
+                selector: banner,
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            });
         });
     }
+    
+    // ===========================
+    // PRODUÇÃO DE CONTEÚDO - PORTFOLIO FUNCTIONALITY
+    // ===========================
+    
+    // Initialize portfolio functionality for produção de conteúdo page
+    function initializePortfolioFunctionality() {
+        const bannersSection = document.querySelector('.ramos-banners');
+        if (!bannersSection) return; // Exit if not on produção de conteúdo page
+        
+        const banners = document.querySelectorAll('.banner-item');
+        
+        banners.forEach(banner => {
+            banner.addEventListener('click', function() {
+                const ramo = this.id;
+                if (ramo) {
+                    showPortfolio(ramo);
+                }
+            });
+        });
+    }
+    
+    // Função para trocar o conteúdo da main pelo portfolio específico
+    function showPortfolio(ramo) {
+        const main = document.querySelector('main');
+        if (!main) return;
+        
+        const portfolioData = getPortfolioData(ramo);
+        
+        main.innerHTML = `
+            <section class="portfolio-section">
+                <div class="portfolio-container">
+                    <h2 class="portfolio-title">${portfolioData.title}</h2>
+                    <div class="portfolio-grid portfolio-${ramo}">
+                        ${portfolioData.images.map(img => `
+                            <div class="portfolio-item">
+                                <img src="${img.src}" alt="${img.alt}" loading="lazy">
+                            </div>
+                        `).join('')}
+                    </div>
+                    <div class="back-button-container">
+                        <button class="back-button" onclick="showMainContent()">← Voltar</button>
+                    </div>
+                </div>
+            </section>
+        `;
+    }
+    
+    // Função para voltar ao conteúdo principal
+    function showMainContent() {
+        location.reload();
+    }
+    
+    // Dados dos portfolios
+    function getPortfolioData(ramo) {
+        const portfolios = {
+            arquitetura: {
+                title: 'ARQUITETURA & MARCENARIA',
+                images: [
+                    { src: 'assets/portfolio/arquitetura-marcenaria/arquitetura-1.jpeg', alt: 'Arquitetura 1' },
+                    { src: 'assets/portfolio/arquitetura-marcenaria/arquitetura-2.JPG', alt: 'Arquitetura 2' },
+                    { src: 'assets/portfolio/arquitetura-marcenaria/arquitetura-3.jpeg', alt: 'Arquitetura 3' },
+                    { src: 'assets/portfolio/arquitetura-marcenaria/arquitetura-4.jpeg', alt: 'Arquitetura 4' },
+                    { src: 'assets/portfolio/arquitetura-marcenaria/arquitetura-5.jpeg', alt: 'Arquitetura 5' },
+                    { src: 'assets/portfolio/arquitetura-marcenaria/arquitetura-6.jpeg', alt: 'Arquitetura 6' },
+                    { src: 'assets/portfolio/arquitetura-marcenaria/arquitetura-7.jpeg', alt: 'Arquitetura 7' },
+                    { src: 'assets/portfolio/arquitetura-marcenaria/arquitetura-8.jpeg', alt: 'Arquitetura 8' },
+                    { src: 'assets/portfolio/arquitetura-marcenaria/arquitetura-9.jpeg', alt: 'Arquitetura 9' },
+                    { src: 'assets/portfolio/arquitetura-marcenaria/arquitetura-10.jpeg', alt: 'Arquitetura 10' }
+                ]
+            },
+            moda: {
+                title: 'MODA & VESTUÁRIO',
+                images: [
+                    { src: 'assets/portfolio/moda/moda-1.jpeg', alt: 'Moda 1' },
+                    { src: 'assets/portfolio/moda/moda-2.jpeg', alt: 'Moda 2' },
+                    { src: 'assets/portfolio/moda/moda-3.jpeg', alt: 'Moda 3' },
+                    { src: 'assets/portfolio/moda/moda-4.jpeg', alt: 'Moda 4' },
+                    { src: 'assets/portfolio/moda/moda-5.jpeg', alt: 'Moda 5' },
+                    { src: 'assets/portfolio/moda/moda-6.jpeg', alt: 'Moda 6' },
+                    { src: 'assets/portfolio/moda/moda-7.jpeg', alt: 'Moda 7' },
+                    { src: 'assets/portfolio/moda/moda-8.jpeg', alt: 'Moda 8' },
+                    { src: 'assets/portfolio/moda/moda-9.jpeg', alt: 'Moda 9' },
+                    { src: 'assets/portfolio/moda/moda-10.jpeg', alt: 'Moda 10' }
+                ]
+            },
+            automobilistico: {
+                title: 'AUTOMOBILÍSTICO',
+                images: [
+                    { src: 'assets/portfolio/automobilistico/automobilistico-1.jpeg', alt: 'Carro 1' },
+                    { src: 'assets/portfolio/automobilistico/automobilistico-2.jpeg', alt: 'Carro 2' },
+                    { src: 'assets/portfolio/automobilistico/automobilistico-3.jpeg', alt: 'Carro 3' },
+                    { src: 'assets/portfolio/automobilistico/automobilistico-4.jpeg', alt: 'Carro 4' },
+                    { src: 'assets/portfolio/automobilistico/automobilistico-5.jpeg', alt: 'Carro 5' },
+                    { src: 'assets/portfolio/automobilistico/automobilistico-6.jpeg', alt: 'Carro 6' },
+                    { src: 'assets/portfolio/automobilistico/automobilistico-7.jpeg', alt: 'Carro 7' },
+                    { src: 'assets/portfolio/automobilistico/automobilistico-8.jpeg', alt: 'Carro 8' },
+                    { src: 'assets/portfolio/automobilistico/automobilistico-9.jpeg', alt: 'Carro 9' },
+                    { src: 'assets/portfolio/automobilistico/automobilistico-10.jpeg', alt: 'Carro 10' }
+                ]
+            },
+            gastronomia: {
+                title: 'GASTRONOMIA',
+                images: [
+                    { src: 'assets/portfolio/gastronomia/gastronomia-1.jpeg', alt: 'Gastronomia 1' },
+                    { src: 'assets/portfolio/gastronomia/gastronomia-2.jpeg', alt: 'Gastronomia 2' },
+                    { src: 'assets/portfolio/gastronomia/gastronomia-3.jpeg', alt: 'Gastronomia 3' },
+                    { src: 'assets/portfolio/gastronomia/gastronomia-4.jpg', alt: 'Gastronomia 4' },
+                    { src: 'assets/portfolio/gastronomia/gastronomia-5.jpg', alt: 'Gastronomia 5' },
+                    { src: 'assets/portfolio/gastronomia/gastronomia-6.jpeg', alt: 'Gastronomia 6' },
+                    { src: 'assets/portfolio/gastronomia/gastronomia-7.jpg', alt: 'Gastronomia 7' },
+                    { src: 'assets/portfolio/gastronomia/gastronomia-8.jpeg', alt: 'Gastronomia 8' },
+                    { src: 'assets/portfolio/gastronomia/gastronomia-9.jpeg', alt: 'Gastronomia 9' },
+                    { src: 'assets/portfolio/gastronomia/gastronomia-10.jpg', alt: 'Gastronomia 10' }
+                ]
+            },
+            imobiliario: {
+                title: 'MERCADO IMOBILIÁRIO',
+                images: [
+                    { src: 'assets/portfolio/imobiliario/imobiliario-1.jpg', alt: 'Imobiliário 1' },
+                    { src: 'assets/portfolio/imobiliario/imobiliario-2.jpg', alt: 'Imobiliário 2' },
+                    { src: 'assets/portfolio/imobiliario/imobiliario-3.jpg', alt: 'Imobiliário 3' },
+                    { src: 'assets/portfolio/imobiliario/imobiliario-4.jpg', alt: 'Imobiliário 4' },
+                    { src: 'assets/portfolio/imobiliario/imobiliario-5.jpg', alt: 'Imobiliário 5' },
+                    { src: 'assets/portfolio/imobiliario/imobiliario-6.jpg', alt: 'Imobiliário 6' },
+                    { src: 'assets/portfolio/imobiliario/imobiliario-7.jpg', alt: 'Imobiliário 7' },
+                    { src: 'assets/portfolio/imobiliario/imobiliario-8.jpg', alt: 'Imobiliário 8' },
+                    { src: 'assets/portfolio/imobiliario/imobiliario-9.jpg', alt: 'Imobiliário 9' },
+                    { src: 'assets/portfolio/imobiliario/imobiliario-10.jpg', alt: 'Imobiliário 10' }
+                ]
+            }
+        };
+        
+        return portfolios[ramo] || portfolios.arquitetura;
+    }
+    
+    // Make functions globally available for onclick handlers
+    window.showPortfolio = showPortfolio;
+    window.showMainContent = showMainContent;
     
 // ===========================
 // VIDEO PERFORMANCE OPTIMIZATION
