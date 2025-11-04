@@ -4,13 +4,48 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Soho Agency - Gestão de Redes Sociais</title>
-  <link rel="stylesheet" href="css/styles.css">
-  <link rel="stylesheet" href="css/header-pages.css">
-  <link rel="stylesheet" href="css/page_gestao_redes.css">
-  <link rel="stylesheet" href="css/index/footer.css">
-  <link rel="stylesheet" href="css/animations.css">
+  <!-- CSS Crítico Inline (Header) -->
+  <style>
+    :root {
+      --color-black: #000000;
+      --color-dark-gray: #191919;
+      --color-white: #ffffff;
+      --color-text-primary: #333;
+      --color-text-light: #ccc;
+      --color-hover-light: #f0f0f0;
+    }
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:'Inter',sans-serif;line-height:1.6;color:var(--color-text-primary)}
+    .header{position:fixed;top:0;left:0;width:100%;background:var(--color-dark-gray);z-index:1000;padding:0;height:auto;overflow:visible}
+    .header.scrolled{background:var(--color-dark-gray)}
+    .nav-container{max-width:1200px;margin:0 auto;padding:0 2rem;display:flex;flex-direction:column;justify-content:flex-start;align-items:center;height:80px;position:relative}
+    .header-top{width:100%;max-width:1200px;display:flex;justify-content:space-between;align-items:center;padding:1rem 0;position:relative;z-index:1002}
+    .logo-container{height:60px;overflow:hidden;display:flex;align-items:center}
+    .logo{height:220px;width:auto;margin-top:-30px;margin-bottom:-30px}
+  </style>
+  
+ <!-- CSS Files - Carregamento otimizado com preload -->
+  <link rel="preload" href="css/styles.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="css/styles.css"></noscript>
+
+  <link rel="preload" href="css/header-pages.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="css/header-pages.css"></noscript>
+
+  <link rel="preload" href="css/page_gestao_redes.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="css/page_gestao_redes.css"></noscript>
+
+  <link rel="preload" href="css/index/footer.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="css/index/footer.css"></noscript>
+
+  <link rel="preload" href="css/animations.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="css/animations.css"></noscript>
+
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css">
+  <!-- Script para habilitar preload -->
+  <script>
+    !function(e){"use strict";var t=function(t,n,o){var i,r=e.document,a=r.createElement("link");if(n)i=n;else{var l=(r.body||r.getElementsByTagName("head")[0]).childNodes;i=l[l.length-1]}var d=r.styleSheets;a.rel="stylesheet",a.href=t,a.media="only x",function e(t){if(r.body)return t();setTimeout(function(){e(t)})}(function(){i.parentNode.insertBefore(a,n?i:i.nextSibling)});var f=function(e){for(var t=a.href,n=r.styleSheets,o=0;o<n.length;o++)if(n[o].href===t)return e();setTimeout(function(){f(e)})};return a.addEventListener&&a.addEventListener("load",function(){this.media=o||"all"}),a.onloadcssdefined=f,f(function(){a.media!==o&&(a.media=o||"all")}),a};"undefined"!=typeof exports?exports.loadCSS=t:e.loadCSS=t}("undefined"!=typeof global?global:this);
+  </script>
 </head>
 <body>
   <!-- Header -->
@@ -19,7 +54,7 @@
         <div class="header-top">
             <div class="logo-container">
                 <a href="index.html">
-                    <img src="assets/logo-horizontal-off-white-fundo-transparente.png" alt="Soho Agency" class="logo" loading="eager" decoding="async">
+                    <img src="assets/logo-horizontal-off-white-fundo-transparente.png" alt="Soho Agency" class="logo" loading="eager" decoding="async" width="400" height="220">
                 </a>
             </div>
             
@@ -85,21 +120,21 @@
       
       <div class="gestao-carousel-container">
         <div class="gestao-carousel">
-          <div><img src="assets/gestao-1.PNG" alt="Gestão de Redes Sociais 1" loading="lazy" decoding="async"></div>
-          <div><img src="assets/gestao-2.PNG" alt="Gestão de Redes Sociais 2" loading="lazy" decoding="async"></div>
-          <div><img src="assets/gestao-3.PNG" alt="Gestão de Redes Sociais 3" loading="lazy" decoding="async"></div>
-          <div><img src="assets/gestao-4.PNG" alt="Gestão de Redes Sociais 4" loading="lazy" decoding="async"></div>
-          <div><img src="assets/gestao-5.PNG" alt="Gestão de Redes Sociais 5" loading="lazy" decoding="async"></div>
-          <div><img src="assets/gestao-6.PNG" alt="Gestão de Redes Sociais 6" loading="lazy" decoding="async"></div>
-          <div><img src="assets/gestao-7.PNG" alt="Gestão de Redes Sociais 7" loading="lazy" decoding="async"></div>
-          <div><img src="assets/gestao-8.PNG" alt="Gestão de Redes Sociais 8" loading="lazy" decoding="async"></div>
-          <div><img src="assets/gestao-9.PNG" alt="Gestão de Redes Sociais 9" loading="lazy" decoding="async"></div>
-          <div><img src="assets/gestao-10.PNG" alt="Gestão de Redes Sociais 10" loading="lazy" decoding="async"></div>
-          <div><img src="assets/gestao-11.PNG" alt="Gestão de Redes Sociais 11" loading="lazy" decoding="async"></div>
-          <div><img src="assets/gestao-12.PNG" alt="Gestão de Redes Sociais 12" loading="lazy" decoding="async"></div>
-          <div><img src="assets/gestao-13.PNG" alt="Gestão de Redes Sociais 13" loading="lazy" decoding="async"></div>
-          <div><img src="assets/gestao-14.PNG" alt="Gestão de Redes Sociais 14" loading="lazy" decoding="async"></div>
-          <div><img src="assets/gestao-15.PNG" alt="Gestão de Redes Sociais 15" loading="lazy" decoding="async"></div>
+          <div><img src="assets/gestao-1.PNG" alt="Gestão de Redes Sociais 1" loading="lazy" decoding="async" width="400" height="400"></div>
+          <div><img src="assets/gestao-2.PNG" alt="Gestão de Redes Sociais 2" loading="lazy" decoding="async" width="400" height="400"></div>
+          <div><img src="assets/gestao-3.PNG" alt="Gestão de Redes Sociais 3" loading="lazy" decoding="async" width="400" height="400"></div>
+          <div><img src="assets/gestao-4.PNG" alt="Gestão de Redes Sociais 4" loading="lazy" decoding="async" width="400" height="400"></div>
+          <div><img src="assets/gestao-5.PNG" alt="Gestão de Redes Sociais 5" loading="lazy" decoding="async" width="400" height="400"></div>
+          <div><img src="assets/gestao-6.PNG" alt="Gestão de Redes Sociais 6" loading="lazy" decoding="async" width="400" height="400"></div>
+          <div><img src="assets/gestao-7.PNG" alt="Gestão de Redes Sociais 7" loading="lazy" decoding="async" width="400" height="400"></div>
+          <div><img src="assets/gestao-8.PNG" alt="Gestão de Redes Sociais 8" loading="lazy" decoding="async" width="400" height="400"></div>
+          <div><img src="assets/gestao-9.PNG" alt="Gestão de Redes Sociais 9" loading="lazy" decoding="async" width="400" height="400"></div>
+          <div><img src="assets/gestao-10.PNG" alt="Gestão de Redes Sociais 10" loading="lazy" decoding="async" width="400" height="400"></div>
+          <div><img src="assets/gestao-11.PNG" alt="Gestão de Redes Sociais 11" loading="lazy" decoding="async" width="400" height="400"></div>
+          <div><img src="assets/gestao-12.PNG" alt="Gestão de Redes Sociais 12" loading="lazy" decoding="async" width="400" height="400"></div>
+          <div><img src="assets/gestao-13.PNG" alt="Gestão de Redes Sociais 13" loading="lazy" decoding="async" width="400" height="400"></div>
+          <div><img src="assets/gestao-14.PNG" alt="Gestão de Redes Sociais 14" loading="lazy" decoding="async" width="400" height="400"></div>
+          <div><img src="assets/gestao-15.PNG" alt="Gestão de Redes Sociais 15" loading="lazy" decoding="async" width="400" height="400"></div>
         </div>
       </div>
       <div class="container">
@@ -197,8 +232,8 @@
 
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
-  <script src="script.js"></script>
-  <script src="js/animations.js"></script>
+  <script src="script.js" defer></script>
+  <script src="js/animations.js" defer></script>
   <script>
     $(document).ready(function(){
       // Inicialização do carrossel de imagens
