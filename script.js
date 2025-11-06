@@ -809,7 +809,7 @@ async function sendEmail(formData) {
             portfolio: [
                 { video: 'assets/agenciamento/portfolio-melissa-hartman/Loreal.mp4', brand: 'L\'Oréal', logo: 'assets/agenciamento/logos-marcas/logo-loreal.png' },
                 { video: 'assets/agenciamento/portfolio-melissa-hartman/Boticario.mp4', brand: 'O Boticário', logo: 'assets/agenciamento/logos-marcas/logo-boticario.png' },
-                { video: 'assets/agenciamento/portfolio-melissa-hartman/Tuyo.mp4', brand: 'Tuyo', logo: 'assets/agenciamento/logos-marcas/logo-tuyo.png' },
+                { video: 'assets/agenciamento/portfolio-melissa-hartman/Tuyo.mp4', brand: 'Tuyo', logo: 'assets/agenciamento/logos-marcas/logo-tuyo.PNG' },
                 { video: 'assets/agenciamento/portfolio-melissa-hartman/Tricoteen.mp4', brand: 'Tricoteen', logo: 'assets/agenciamento/logos-marcas/logo-tricoteen.webp' }
             ]
         },
