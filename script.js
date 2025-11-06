@@ -320,483 +320,483 @@ async function sendEmail(formData) {
     if (EMAILJS_CONFIG.serviceId === 'YOUR_SERVICE_ID' || 
         EMAILJS_CONFIG.templateId === 'YOUR_TEMPLATE_ID' || 
         EMAILJS_CONFIG.publicKey === 'YOUR_PUBLIC_KEY') {
+            
+            console.log('Dados do formulário (configuração EmailJS pendente):', formData);
+            
+            // Simulate success for now
+            return new Promise((resolve) => {
+                setTimeout(() => {
+                    resolve('Email enviado com sucesso (simulado)');
+                }, 1000);
+            });
+        }
         
-        console.log('Dados do formulário (configuração EmailJS pendente):', formData);
+        // Send actual email
+        const response = await emailjs.send(
+            EMAILJS_CONFIG.serviceId,
+            EMAILJS_CONFIG.templateId,
+            {
+                from_name: formData.name,
+                from_email: formData.email,
+                service_type: formData.service,
+                message: formData.message,
+                timestamp: formData.timestamp
+            }
+        );
         
-        // Simulate success for now
-        return new Promise((resolve) => {
-            setTimeout(() => {
-                resolve('Email enviado com sucesso (simulado)');
-            }, 1000);
+        return response;
+    }
+    
+    // Form validation
+    function validateForm(form) {
+        let isValid = true;
+        
+        const name = form.querySelector('#name');
+        const email = form.querySelector('#email');
+        const service = form.querySelector('input[name="service"]:checked');
+        const message = form.querySelector('#message');
+        
+        // Clear previous errors
+        clearAllErrors(form);
+        
+        // Validate name
+        if (!name.value.trim()) {
+            showFieldError(name, 'Por favor, informe seu nome');
+            isValid = false;
+        } else if (name.value.trim().length < 2) {
+            showFieldError(name, 'Nome deve ter pelo menos 2 caracteres');
+            isValid = false;
+        }
+        
+        // Validate email
+        if (!email.value.trim()) {
+            showFieldError(email, 'Por favor, informe seu email');
+            isValid = false;
+        } else if (!isValidEmail(email.value)) {
+            showFieldError(email, 'Por favor, informe um email válido');
+            isValid = false;
+        }
+        
+        // Validate service selection
+        if (!service) {
+            showFieldError(form.querySelector('.service-options'), 'Por favor, selecione um serviço');
+            isValid = false;
+        }
+        
+        // Validate message
+        if (!message.value.trim()) {
+            showFieldError(message, 'Por favor, deixe uma mensagem');
+            isValid = false;
+        } else if (message.value.trim().length < 10) {
+            showFieldError(message, 'Mensagem deve ter pelo menos 10 caracteres');
+            isValid = false;
+        }
+        
+        return isValid;
+    }
+    
+    // Validate individual field
+    function validateField(event) {
+        const field = event.target;
+        const value = field.value.trim();
+        
+        clearFieldError(field);
+        
+        switch (field.type) {
+            case 'text':
+            if (field.name === 'name' && value && value.length < 2) {
+                showFieldError(field, 'Nome deve ter pelo menos 2 caracteres');
+            }
+            break;
+            case 'email':
+            if (value && !isValidEmail(value)) {
+                showFieldError(field, 'Por favor, informe um email válido');
+            }
+            break;
+            case 'textarea':
+            if (value && value.length < 10) {
+                showFieldError(field, 'Mensagem deve ter pelo menos 10 caracteres');
+            }
+            break;
+        }
+    }
+    
+    // Email validation
+    function isValidEmail(email) {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    }
+    
+    // Show field error
+    function showFieldError(field, message) {
+        clearFieldError(field);
+        
+        const errorDiv = document.createElement('div');
+        errorDiv.className = 'field-error';
+        errorDiv.textContent = message;
+        errorDiv.style.color = '#e74c3c';
+        errorDiv.style.fontSize = '0.8rem';
+        errorDiv.style.marginTop = '0.5rem';
+        
+        field.parentNode.appendChild(errorDiv);
+        field.style.borderBottomColor = '#e74c3c';
+    }
+    
+    // Clear field error
+    function clearFieldError(field) {
+        const errorDiv = field.parentNode.querySelector('.field-error');
+        if (errorDiv) {
+            errorDiv.remove();
+        }
+        field.style.borderBottomColor = '#000';
+    }
+    
+    // Clear all errors
+    function clearAllErrors(form) {
+        const errors = form.querySelectorAll('.field-error');
+        errors.forEach(error => error.remove());
+        
+        const fields = form.querySelectorAll('input, textarea');
+        fields.forEach(field => {
+            field.style.borderBottomColor = '#000';
         });
     }
     
-    // Send actual email
-    const response = await emailjs.send(
-        EMAILJS_CONFIG.serviceId,
-        EMAILJS_CONFIG.templateId,
-        {
-            from_name: formData.name,
-            from_email: formData.email,
-            service_type: formData.service,
-            message: formData.message,
-            timestamp: formData.timestamp
+    // Show success/error message
+    function showMessage(text, type) {
+        // Remove existing messages
+        const existingMessage = document.querySelector('.form-message');
+        if (existingMessage) {
+            existingMessage.remove();
         }
-    );
+        
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `form-message ${type}`;
+        messageDiv.textContent = text;
+        
+        const contactForm = document.getElementById('contact-form');
+        contactForm.appendChild(messageDiv);
+        
+        // Auto-remove message after 5 seconds
+        setTimeout(() => {
+            if (messageDiv.parentNode) {
+                messageDiv.remove();
+            }
+        }, 5000);
+    };
     
-    return response;
-}
-
-// Form validation
-function validateForm(form) {
-    let isValid = true;
+    // ===========================
+    // UTILITY FUNCTIONS
+    // ===========================
     
-    const name = form.querySelector('#name');
-    const email = form.querySelector('#email');
-    const service = form.querySelector('input[name="service"]:checked');
-    const message = form.querySelector('#message');
-    
-    // Clear previous errors
-    clearAllErrors(form);
-    
-    // Validate name
-    if (!name.value.trim()) {
-        showFieldError(name, 'Por favor, informe seu nome');
-        isValid = false;
-    } else if (name.value.trim().length < 2) {
-        showFieldError(name, 'Nome deve ter pelo menos 2 caracteres');
-        isValid = false;
-    }
-    
-    // Validate email
-    if (!email.value.trim()) {
-        showFieldError(email, 'Por favor, informe seu email');
-        isValid = false;
-    } else if (!isValidEmail(email.value)) {
-        showFieldError(email, 'Por favor, informe um email válido');
-        isValid = false;
-    }
-    
-    // Validate service selection
-    if (!service) {
-        showFieldError(form.querySelector('.service-options'), 'Por favor, selecione um serviço');
-        isValid = false;
-    }
-    
-    // Validate message
-    if (!message.value.trim()) {
-        showFieldError(message, 'Por favor, deixe uma mensagem');
-        isValid = false;
-    } else if (message.value.trim().length < 10) {
-        showFieldError(message, 'Mensagem deve ter pelo menos 10 caracteres');
-        isValid = false;
-    }
-    
-    return isValid;
-}
-
-// Validate individual field
-function validateField(event) {
-    const field = event.target;
-    const value = field.value.trim();
-    
-    clearFieldError(field);
-    
-    switch (field.type) {
-        case 'text':
-        if (field.name === 'name' && value && value.length < 2) {
-            showFieldError(field, 'Nome deve ter pelo menos 2 caracteres');
+    // Função utilitária para toggle de classe 'active' em elementos
+    function toggleActiveClass(clickedElement, allElements, callback = null) {
+        // Remove active de todos os elementos
+        allElements.forEach(element => element.classList.remove('active'));
+        // Adiciona active ao elemento clicado
+        clickedElement.classList.add('active');
+        // Executa callback se fornecido
+        if (callback && typeof callback === 'function') {
+            callback(clickedElement);
         }
-        break;
-        case 'email':
-        if (value && !isValidEmail(value)) {
-            showFieldError(field, 'Por favor, informe um email válido');
-        }
-        break;
-        case 'textarea':
-        if (value && value.length < 10) {
-            showFieldError(field, 'Mensagem deve ter pelo menos 10 caracteres');
-        }
-        break;
-    }
-}
-
-// Email validation
-function isValidEmail(email) {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-}
-
-// Show field error
-function showFieldError(field, message) {
-    clearFieldError(field);
-    
-    const errorDiv = document.createElement('div');
-    errorDiv.className = 'field-error';
-    errorDiv.textContent = message;
-    errorDiv.style.color = '#e74c3c';
-    errorDiv.style.fontSize = '0.8rem';
-    errorDiv.style.marginTop = '0.5rem';
-    
-    field.parentNode.appendChild(errorDiv);
-    field.style.borderBottomColor = '#e74c3c';
-}
-
-// Clear field error
-function clearFieldError(field) {
-    const errorDiv = field.parentNode.querySelector('.field-error');
-    if (errorDiv) {
-        errorDiv.remove();
-    }
-    field.style.borderBottomColor = '#000';
-}
-
-// Clear all errors
-function clearAllErrors(form) {
-    const errors = form.querySelectorAll('.field-error');
-    errors.forEach(error => error.remove());
-    
-    const fields = form.querySelectorAll('input, textarea');
-    fields.forEach(field => {
-        field.style.borderBottomColor = '#000';
-    });
-}
-
-// Show success/error message
-function showMessage(text, type) {
-    // Remove existing messages
-    const existingMessage = document.querySelector('.form-message');
-    if (existingMessage) {
-        existingMessage.remove();
     }
     
-    const messageDiv = document.createElement('div');
-    messageDiv.className = `form-message ${type}`;
-    messageDiv.textContent = text;
-    
-    const contactForm = document.getElementById('contact-form');
-    contactForm.appendChild(messageDiv);
-    
-    // Auto-remove message after 5 seconds
-    setTimeout(() => {
-        if (messageDiv.parentNode) {
-            messageDiv.remove();
-        }
-    }, 5000);
-};
-
-// ===========================
-// UTILITY FUNCTIONS
-// ===========================
-
-// Função utilitária para toggle de classe 'active' em elementos
-function toggleActiveClass(clickedElement, allElements, callback = null) {
-    // Remove active de todos os elementos
-    allElements.forEach(element => element.classList.remove('active'));
-    // Adiciona active ao elemento clicado
-    clickedElement.classList.add('active');
-    // Executa callback se fornecido
-    if (callback && typeof callback === 'function') {
-        callback(clickedElement);
+    // Função utilitária para fechar menu mobile
+    function closeMobileMenu() {
+        const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+        const navMenu = document.getElementById('nav-menu');
+        const header = document.getElementById('header');
+        
+        if (mobileMenuToggle) mobileMenuToggle.classList.remove('active');
+        if (navMenu) navMenu.classList.remove('active');
+        if (header) header.classList.remove('menu-open');
     }
-}
-
-// Função utilitária para fechar menu mobile
-function closeMobileMenu() {
-    const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
-    const navMenu = document.getElementById('nav-menu');
-    const header = document.getElementById('header');
     
-    if (mobileMenuToggle) mobileMenuToggle.classList.remove('active');
-    if (navMenu) navMenu.classList.remove('active');
-    if (header) header.classList.remove('menu-open');
-}
-
-// ===========================
-// UTILITY: ANIMATION OBSERVER
-// ===========================
-
-// Função utilitária reutilizável para criar IntersectionObserver para animações
-function createAnimationObserver(options = {}) {
-    const {
-        selector, // Elemento ou seletor a observar
-        targetSelector, // Elemento alvo para adicionar classe (opcional, usa selector se não fornecido)
-        className = 'animate', // Classe CSS a adicionar
-        threshold = 0.3,
-        rootMargin = '0px 0px -50px 0px',
-        unobserveAfterTrigger = true // Se deve parar de observar após trigger
-    } = options;
+    // ===========================
+    // UTILITY: ANIMATION OBSERVER
+    // ===========================
     
-    const element = typeof selector === 'string' ? document.querySelector(selector) : selector;
-    const targetElement = targetSelector ? 
+    // Função utilitária reutilizável para criar IntersectionObserver para animações
+    function createAnimationObserver(options = {}) {
+        const {
+            selector, // Elemento ou seletor a observar
+            targetSelector, // Elemento alvo para adicionar classe (opcional, usa selector se não fornecido)
+            className = 'animate', // Classe CSS a adicionar
+            threshold = 0.3,
+            rootMargin = '0px 0px -50px 0px',
+            unobserveAfterTrigger = true // Se deve parar de observar após trigger
+        } = options;
+        
+        const element = typeof selector === 'string' ? document.querySelector(selector) : selector;
+        const targetElement = targetSelector ? 
         (typeof targetSelector === 'string' ? document.querySelector(targetSelector) : targetSelector) : 
         element;
-    
-    if (!element || !targetElement) return null;
-    
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                targetElement.classList.add(className);
-                if (unobserveAfterTrigger) {
-                    observer.unobserve(entry.target);
+        
+        if (!element || !targetElement) return null;
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    targetElement.classList.add(className);
+                    if (unobserveAfterTrigger) {
+                        observer.unobserve(entry.target);
+                    }
                 }
-            }
-        });
-    }, { threshold, rootMargin });
-    
-    observer.observe(element);
-    return observer;
-}
-
-// ===========================
-// ABOUT SECTION ANIMATION
-// ===========================
-
-function initializeAboutAnimation() {
-    const aboutImages = document.querySelector('.about-images');
-    if (!aboutImages) return;
-    
-    createAnimationObserver({
-        selector: '#sobre',
-        targetSelector: aboutImages,
-        threshold: 0.3,
-        rootMargin: '-50px 0px -50px 0px'
-    });
-}
-
-// Inicializa a animação da seção about quando o DOM estiver carregado
-document.addEventListener('DOMContentLoaded', initializeAboutAnimation);
-
-// ===========================
-// TEAM SECTION FUNCTIONALITY
-// ===========================
-
-// Team members data
-const teamMembers = {
-    paloma: {
-        name: 'Paloma Viana',
-        role: 'Diretora de Criação',
-        photo: 'assets/Paloma_Viana.jpg'
-    },
-    gabriella: {
-        name: 'Gabriella Almeida',
-        role: 'Diretora de Planejamento',
-        photo: 'assets/Gabriella_Almeida.jpg'
-    },
-    clara: {
-        name: 'Clara Kersh',
-        role: 'Atendimento',
-        photo: 'assets/Clara_kersh.jpg'
-    },
-    milena: {
-        name: 'Milena Araújo',
-        role: 'Produtora Audiovisual',
-        photo: 'assets/Milena_Araujo.jpg'
-    },
-    hiago: {
-        name: 'Hiago Azevedo',
-        role: 'Diretor de Produção Criativa',
-        photo: 'assets/placeholder.jpg' // Placeholder para foto não disponível
-    },
-};
-
-// Initialize team section functionality
-function initializeTeamSection() {
-    const teamMembersList = document.querySelectorAll('.team-member');
-    const memberPhoto = document.getElementById('member-photo');
-    const memberName = document.getElementById('member-name');
-    const memberRole = document.getElementById('member-role');
-    
-    if (!teamMembersList.length || !memberPhoto || !memberName || !memberRole) {
-        return; // Exit if elements not found
-    }
-    
-    // Add click event listeners to team members
-    teamMembersList.forEach(member => {
-        member.addEventListener('click', function() {
-            const memberId = this.getAttribute('data-member');
-            
-            // Toggle active class and update display
-            toggleActiveClass(this, teamMembersList, () => {
-                updateMemberDisplay(memberId);
             });
-        });
-    });
-}
-
-// Update member display
-function updateMemberDisplay(memberId) {
-    const memberData = teamMembers[memberId];
-    const memberPhoto = document.getElementById('member-photo');
-    const memberName = document.getElementById('member-name');
-    const memberRole = document.getElementById('member-role');
-    
-    if (!memberData || !memberPhoto || !memberName || !memberRole) {
-        return;
+        }, { threshold, rootMargin });
+        
+        observer.observe(element);
+        return observer;
     }
     
-    // Update photo
-    memberPhoto.src = memberData.photo;
-    memberPhoto.alt = memberData.name;
+    // ===========================
+    // ABOUT SECTION ANIMATION
+    // ===========================
     
-    // Update name and role
-    memberName.textContent = memberData.name;
-    memberRole.textContent = memberData.role;
+    function initializeAboutAnimation() {
+        const aboutImages = document.querySelector('.about-images');
+        if (!aboutImages) return;
+        
+        createAnimationObserver({
+            selector: '#sobre',
+            targetSelector: aboutImages,
+            threshold: 0.3,
+            rootMargin: '-50px 0px -50px 0px'
+        });
+    }
     
-    // Add loading state for photo
-    memberPhoto.style.opacity = '0.7';
-    memberPhoto.onload = function() {
-        this.style.opacity = '1';
+    // Inicializa a animação da seção about quando o DOM estiver carregado
+    document.addEventListener('DOMContentLoaded', initializeAboutAnimation);
+    
+    // ===========================
+    // TEAM SECTION FUNCTIONALITY
+    // ===========================
+    
+    // Team members data
+    const teamMembers = {
+        paloma: {
+            name: 'Paloma Viana',
+            role: 'Diretora de Criação',
+            photo: 'assets/equipe/Paloma_Viana.jpg'
+        },
+        gabriella: {
+            name: 'Gabriella Almeida',
+            role: 'Diretora de Planejamento',
+            photo: 'assets/equipe/Gabriella_Almeida.jpg'
+        },
+        clara: {
+            name: 'Clara Kersh',
+            role: 'Atendimento',
+            photo: 'assets/equipe/Clara_kersh.jpg'
+        },
+        milena: {
+            name: 'Milena Araújo',
+            role: 'Produtora Audiovisual',
+            photo: 'assets/equipe/Milena_Araujo.jpg'
+        },
+        hiago: {
+            name: 'Hiago Azevedo',
+            role: 'Operador de Drone',
+            photo: 'assets/equipe/hiago_azevedo.jpg' // Placeholder para foto não disponível
+        },
     };
     
-    // Handle photo load error (for placeholder images)
-    memberPhoto.onerror = function() {
-        this.style.opacity = '0.5';
-    };
-}
-
-// ===========================
-// AGENCIAMENTO FILTERS FUNCTIONALITY
-// ===========================
-
-// Initialize agenciamento filters
-function initializeAgenciamentoFilters() {
-    const filterOptions = document.querySelectorAll('.filter-option');
-    const influencerCards = document.querySelectorAll('.influencer-card');
-    const filterSelected = document.querySelector('.filter-selected');
-    const filterDropdown = document.querySelector('.filter-dropdown');
-    const filterReset = document.getElementById('filter-reset');
-    
-    if (!filterOptions.length || !influencerCards.length) {
-        return; // Exit if elements not found
-    }
-    
-    // Add click event listeners to filter options
-    filterOptions.forEach(option => {
-        option.addEventListener('click', function() {
-            const filterValue = this.getAttribute('data-filter');
-            
-            // Toggle active class on filter options
-            toggleActiveClass(this, filterOptions, () => {
-                // Update selected filter display
-                if (filterSelected) {
-                    filterSelected.textContent = this.textContent;
-                }
-                // Filter influencer cards
-                filterInfluencers(filterValue, influencerCards);
+    // Initialize team section functionality
+    function initializeTeamSection() {
+        const teamMembersList = document.querySelectorAll('.team-member');
+        const memberPhoto = document.getElementById('member-photo');
+        const memberName = document.getElementById('member-name');
+        const memberRole = document.getElementById('member-role');
+        
+        if (!teamMembersList.length || !memberPhoto || !memberName || !memberRole) {
+            return; // Exit if elements not found
+        }
+        
+        // Add click event listeners to team members
+        teamMembersList.forEach(member => {
+            member.addEventListener('click', function() {
+                const memberId = this.getAttribute('data-member');
+                
+                // Toggle active class and update display
+                toggleActiveClass(this, teamMembersList, () => {
+                    updateMemberDisplay(memberId);
+                });
             });
         });
-    });
+    }
     
-    // Add click event listener to reset button
-    if (filterReset) {
-        filterReset.addEventListener('click', function() {
-            // Set first option (LIFESTYLE) as active
-            const firstOption = filterOptions[0];
-            if (firstOption) {
-                toggleActiveClass(firstOption, filterOptions, () => {
+    // Update member display
+    function updateMemberDisplay(memberId) {
+        const memberData = teamMembers[memberId];
+        const memberPhoto = document.getElementById('member-photo');
+        const memberName = document.getElementById('member-name');
+        const memberRole = document.getElementById('member-role');
+        
+        if (!memberData || !memberPhoto || !memberName || !memberRole) {
+            return;
+        }
+        
+        // Update photo
+        memberPhoto.src = memberData.photo;
+        memberPhoto.alt = memberData.name;
+        
+        // Update name and role
+        memberName.textContent = memberData.name;
+        memberRole.textContent = memberData.role;
+        
+        // Add loading state for photo
+        memberPhoto.style.opacity = '0.7';
+        memberPhoto.onload = function() {
+            this.style.opacity = '1';
+        };
+        
+        // Handle photo load error (for placeholder images)
+        memberPhoto.onerror = function() {
+            this.style.opacity = '0.5';
+        };
+    }
+    
+    // ===========================
+    // AGENCIAMENTO FILTERS FUNCTIONALITY
+    // ===========================
+    
+    // Initialize agenciamento filters
+    function initializeAgenciamentoFilters() {
+        const filterOptions = document.querySelectorAll('.filter-option');
+        const influencerCards = document.querySelectorAll('.influencer-card');
+        const filterSelected = document.querySelector('.filter-selected');
+        const filterDropdown = document.querySelector('.filter-dropdown');
+        const filterReset = document.getElementById('filter-reset');
+        
+        if (!filterOptions.length || !influencerCards.length) {
+            return; // Exit if elements not found
+        }
+        
+        // Add click event listeners to filter options
+        filterOptions.forEach(option => {
+            option.addEventListener('click', function() {
+                const filterValue = this.getAttribute('data-filter');
+                
+                // Toggle active class on filter options
+                toggleActiveClass(this, filterOptions, () => {
                     // Update selected filter display
                     if (filterSelected) {
-                        filterSelected.textContent = 'LIFESTYLE';
+                        filterSelected.textContent = this.textContent;
                     }
-                    // Show all influencer cards
-                    showAllInfluencers(influencerCards);
+                    // Filter influencer cards
+                    filterInfluencers(filterValue, influencerCards);
                 });
-            }
+            });
         });
+        
+        // Add click event listener to reset button
+        if (filterReset) {
+            filterReset.addEventListener('click', function() {
+                // Set first option (LIFESTYLE) as active
+                const firstOption = filterOptions[0];
+                if (firstOption) {
+                    toggleActiveClass(firstOption, filterOptions, () => {
+                        // Update selected filter display
+                        if (filterSelected) {
+                            filterSelected.textContent = 'LIFESTYLE';
+                        }
+                        // Show all influencer cards
+                        showAllInfluencers(influencerCards);
+                    });
+                }
+            });
+        }
     }
-}
-
-// Filter influencers based on selected category
-function filterInfluencers(selectedFilter, cards) {
-    const gallery = document.querySelector('.influencers-gallery');
     
-    // First, hide all cards with animation
-    cards.forEach(card => {
-        card.style.opacity = '0';
-        card.style.transform = 'scale(0.8)';
-    });
-    
-    // After animation, reorganize DOM
-    setTimeout(() => {
-        const visibleCards = [];
-        const hiddenCards = [];
+    // Filter influencers based on selected category
+    function filterInfluencers(selectedFilter, cards) {
+        const gallery = document.querySelector('.influencers-gallery');
         
-        // Separate cards into visible and hidden arrays
+        // First, hide all cards with animation
         cards.forEach(card => {
-            const categories = card.getAttribute('data-categories');
-            const categoryArray = categories ? categories.split(',') : [];
-            
-            // Check if the card has the selected filter category
-            const hasCategory = categoryArray.includes(selectedFilter);
-            
-            if (hasCategory) {
-                visibleCards.push(card);
-            } else {
-                hiddenCards.push(card);
-            }
-        });
-        
-        // Clear gallery
-        gallery.innerHTML = '';
-        
-        // Add visible cards first
-        visibleCards.forEach(card => {
-            card.classList.remove('hidden');
-            card.style.display = 'block';
-            card.style.opacity = '1';
-            card.style.transform = 'scale(1)';
-            gallery.appendChild(card);
-        });
-        
-        // Add hidden cards at the end (completely hidden)
-        hiddenCards.forEach(card => {
-            card.classList.add('hidden');
-            card.style.display = 'none';
             card.style.opacity = '0';
             card.style.transform = 'scale(0.8)';
-            gallery.appendChild(card);
         });
-    }, 300);
-}
-
-// Show all influencers (reset function)
-function showAllInfluencers(cards) {
-    const gallery = document.querySelector('.influencers-gallery');
-    
-    // Reset to original order
-    setTimeout(() => {
-        // Clear gallery
-        gallery.innerHTML = '';
         
-        // Add all cards back in original order
-        cards.forEach(card => {
-            card.classList.remove('hidden');
-            card.style.display = 'block';
-            card.style.opacity = '1';
-            card.style.transform = 'scale(1)';
-            gallery.appendChild(card);
-        });
-    }, 100);
-}
-
-// ===========================
-// INFLUENCER CLICK FUNCTIONALITY
-// ===========================
-
-// Influencer data
-const influencerData = {
-    'luiza-machado': {
+        // After animation, reorganize DOM
+        setTimeout(() => {
+            const visibleCards = [];
+            const hiddenCards = [];
+            
+            // Separate cards into visible and hidden arrays
+            cards.forEach(card => {
+                const categories = card.getAttribute('data-categories');
+                const categoryArray = categories ? categories.split(',') : [];
+                
+                // Check if the card has the selected filter category
+                const hasCategory = categoryArray.includes(selectedFilter);
+                
+                if (hasCategory) {
+                    visibleCards.push(card);
+                } else {
+                    hiddenCards.push(card);
+                }
+            });
+            
+            // Clear gallery
+            gallery.innerHTML = '';
+            
+            // Add visible cards first
+            visibleCards.forEach(card => {
+                card.classList.remove('hidden');
+                card.style.display = 'block';
+                card.style.opacity = '1';
+                card.style.transform = 'scale(1)';
+                gallery.appendChild(card);
+            });
+            
+            // Add hidden cards at the end (completely hidden)
+            hiddenCards.forEach(card => {
+                card.classList.add('hidden');
+                card.style.display = 'none';
+                card.style.opacity = '0';
+                card.style.transform = 'scale(0.8)';
+                gallery.appendChild(card);
+            });
+        }, 300);
+    }
+    
+    // Show all influencers (reset function)
+    function showAllInfluencers(cards) {
+        const gallery = document.querySelector('.influencers-gallery');
+        
+        // Reset to original order
+        setTimeout(() => {
+            // Clear gallery
+            gallery.innerHTML = '';
+            
+            // Add all cards back in original order
+            cards.forEach(card => {
+                card.classList.remove('hidden');
+                card.style.display = 'block';
+                card.style.opacity = '1';
+                card.style.transform = 'scale(1)';
+                gallery.appendChild(card);
+            });
+        }, 100);
+    }
+    
+    // ===========================
+    // INFLUENCER CLICK FUNCTIONALITY
+    // ===========================
+    
+    // Influencer data
+    const influencerData = {
+        'luiza-machado': {
             name: 'Luiza Machado',
             handle: '@luizamachadop',
             followers: '27.8k',
-            description: 'Luiza Machado é criadora de conteúdo de moda, beleza e lifestyle — virginiana, detalhista e apaixonada por cuidar da estética. Conhecida pelo olhar criativo e cheio de referências, ela acompanha de perto as tendências e transforma isso em conteúdos que vão de looks inspiradores e tutoriais de beleza até momentos de lifestyle que misturam autenticidade e sofisticação.',
-            mainVideo: 'assets/agenciamento/portfolio-luiza-machado/Principal.mov',
+            description: 'Comunicativa por natureza, Luiza mergulha nas redes sociais de forma autêntica e afetiva, transformando cada conteúdo em uma oportunidade real de conexão. Seu olhar sensível para estilo, beleza e cultura dá vida a narrativas que inspiram e aproximam, sempre com naturalidade e verdade. Para ela, criar nas redes é compartilhar experiências, sentimentos e descobertas — tudo com leveza, originalidade e propósito.',
+            mainVideo: 'assets/agenciamento/portfolio-luiza-machado/Principal.mp4',
             portfolio: [
                 { video: 'assets/agenciamento/portfolio-luiza-machado/Beleza-na-Web.mp4', brand: 'Beleza na Web', logo: 'assets/agenciamento/logos-marcas/logo-beleza-na-web.png' },
-                { video: 'assets/agenciamento/portfolio-luiza-machado/Eudora.mov', brand: 'Eudora', logo: 'assets/agenciamento/logos-marcas/logo-eudora.png' },
-                { video: 'assets/agenciamento/portfolio-luiza-machado/Ipanema.mov', brand: 'Ipanema', logo: 'assets/agenciamento/logos-marcas/logo-ipanema.png' },
+                { video: 'assets/agenciamento/portfolio-luiza-machado/Eudora.mp4', brand: 'Eudora', logo: 'assets/agenciamento/logos-marcas/logo-eudora.png' },
+                { video: 'assets/agenciamento/portfolio-luiza-machado/Ipanema.mp4', brand: 'Ipanema', logo: 'assets/agenciamento/logos-marcas/logo-ipanema.png' },
                 { video: 'assets/agenciamento/portfolio-luiza-machado/Melissa.mp4', brand: 'Melissa', logo: 'assets/agenciamento/logos-marcas/logo-melissa.png' }
             ]
         },
@@ -804,11 +804,11 @@ const influencerData = {
             name: 'Melissa Hartman',
             handle: '@amelissahartman',
             followers: '19.3k',
-            description: 'Melissa é uma artista completa: cantora, atriz e influenciadora. Mas é como criadora de conteúdo que ela mostra todo o seu olhar criativo e a capacidade de transformar ideias em narrativas visuais cheias de personalidade. Com autenticidade, estética própria e versatilidade, constrói publicidades que se destacam pela originalidade e conexão com o público.',
-            mainVideo: 'assets/agenciamento/portfolio-melissa-hartman/Principal.mov',
+            description: 'Melissa é uma multiartista nortista que vive no Rio de Janeiro — atriz, modelo, cantora, figurinista e criadora de conteúdo. Com estética forte e identidade marcante, conquistou uma comunidade fiel que admira seu estilo e acompanha sua rotina criativa. Nas redes, compartilha sua vida de forma real e sincera, inspirando mulheres a acreditarem na própria autenticidade e potência.',
+            mainVideo: 'assets/agenciamento/portfolio-melissa-hartman/Principal.mp4',
             portfolio: [
                 { video: 'assets/agenciamento/portfolio-melissa-hartman/Loreal.mp4', brand: 'L\'Oréal', logo: 'assets/agenciamento/logos-marcas/logo-loreal.png' },
-                { video: 'assets/agenciamento/portfolio-melissa-hartman/O Boticário.mov', brand: 'O Boticário', logo: 'assets/agenciamento/logos-marcas/logo-boticario.png' },
+                { video: 'assets/agenciamento/portfolio-melissa-hartman/Boticario.mp4', brand: 'O Boticário', logo: 'assets/agenciamento/logos-marcas/logo-boticario.png' },
                 { video: 'assets/agenciamento/portfolio-melissa-hartman/Tuyo.mp4', brand: 'Tuyo', logo: 'assets/agenciamento/logos-marcas/logo-tuyo.png' },
                 { video: 'assets/agenciamento/portfolio-melissa-hartman/Tricoteen.mp4', brand: 'Tricoteen', logo: 'assets/agenciamento/logos-marcas/logo-tricoteen.webp' }
             ]
@@ -817,12 +817,12 @@ const influencerData = {
             name: 'Flavia Dutra',
             handle: '@fflaviadutra',
             followers: '75.2k',
-            description: 'Flavia é criadora de conteúdo nos nichos de moda e beleza, com uma forma única de se comunicar: leve, divertida e cheia de bom humor. Seus conteúdos misturam referências de estilo e dicas de beleza com um toque descontraído, que aproxima e engaja o público. Sempre autêntica, ela transforma o dia a dia em inspirações criativas, tornando cada parceria ainda mais natural e envolvente.',
-            mainVideo: 'assets/agenciamento/portfolio-flavia-dutra/Principal.mov',
+            description: 'Flávia é uma mulher carioca que vive a vida ao máximo, sempre equilibrando momentos intensos com uma rotina saudável, leve e tranquila. Em suas redes, compartilha seu dia a dia de forma espontânea, priorizando bem-estar, autenticidade e qualidade em tudo o que cria. Seu conteúdo transmite leveza, conexão e lifestyle real, inspirando quem a acompanha a encontrar prazer nas pequenas coisas e viver com mais equilíbrio e propósito.',
+            mainVideo: 'assets/agenciamento/portfolio-flavia-dutra/Principal.mp4',
             portfolio: [
                 { video: 'assets/agenciamento/portfolio-flavia-dutra/Cerave.mp4', brand: 'Cerave', logo: 'assets/agenciamento/logos-marcas/logo-cerave.png' },
                 { video: 'assets/agenciamento/portfolio-flavia-dutra/Creamy.mp4', brand: 'Creamy', logo: 'assets/agenciamento/logos-marcas/logo-creamy.png' },
-                { video: 'assets/agenciamento/portfolio-flavia-dutra/Eudora.mov', brand: 'Eudora', logo: 'assets/agenciamento/logos-marcas/logo-eudora.png' },
+                { video: 'assets/agenciamento/portfolio-flavia-dutra/Eudora.mp4', brand: 'Eudora', logo: 'assets/agenciamento/logos-marcas/logo-eudora.png' },
                 { video: 'assets/agenciamento/portfolio-flavia-dutra/Pacheco.mp4', brand: 'Pacheco', logo: 'assets/agenciamento/logos-marcas/logo-pacheco.png' }
             ]
         },
@@ -830,21 +830,21 @@ const influencerData = {
             name: 'Julia Ceschin',
             handle: '@juliacceschin',
             followers: '69.7k',
-            description: 'Julia é criadora de conteúdo apaixonada por moda e também pelo universo fitness. Com um estilo próprio e cheio de atitude, ela compartilha desde inspirações de looks até sua rotina de treinos e bem-estar. O que mais chama atenção em seu trabalho é a dedicação em produzir vídeos elaborados, com edições criativas e diferentes, que fazem seu conteúdo se destacar nas redes.',
-            mainVideo: 'assets/agenciamento/portfolio-julia-ceschin/Principal.mov',
+            description: 'Júlia é carioca e vive a vida com intensidade, equilibrando uma rotina saudável com muita diversão e energia. Apaixonada por movimento, ela compartilha treinos, hábitos fitness e seu dia a dia agitado de forma leve e inspiradora. Com carisma e autenticidade, construiu uma comunidade fiel que acompanha suas conquistas, sua disciplina e sua forma vibrante de encarar a vida — sempre incentivando a busca pelo bem-estar, pela força e pela alegria de viver cada momento ao máximo.',
+            mainVideo: 'assets/agenciamento/portfolio-julia-ceschin/Principal.mp4',
             portfolio: [
                 { video: 'assets/agenciamento/portfolio-julia-ceschin/C&A.mp4', brand: 'C&A', logo: 'assets/agenciamento/logos-marcas/logo-c&a.png' },
                 { video: 'assets/agenciamento/portfolio-julia-ceschin/Eudora.mp4', brand: 'Eudora', logo: 'assets/agenciamento/logos-marcas/logo-eudora.png' },
                 { video: 'assets/agenciamento/portfolio-julia-ceschin/FarmaLife.mp4', brand: 'FarmaLife', logo: 'assets/agenciamento/logos-marcas/logo-farmalife.png' },
-                { video: 'assets/agenciamento/portfolio-julia-ceschin/Tangle Teezer.mp4', brand: 'Tangle Teezer', logo: 'assets/agenciamento/logos-marcas/logo-tangle-teezer.webp' }
+                { video: 'assets/agenciamento/portfolio-julia-ceschin/Tangle-teezer.mp4', brand: 'Tangle Teezer', logo: 'assets/agenciamento/logos-marcas/logo-tangle-teezer.webp' }
             ]
         },
         'lara-pear': {
             name: 'Lara Pear',
             handle: '@pear.lara',
             followers: '29.2k',
-            description: 'Lara é criadora de conteúdo cheia de personalidade — espontânea, autêntica e sempre bem-humorada. Nos nichos de moda, beleza, casa e decoração, ela compartilha inspirações de forma leve e divertida, conquistando o público pela proximidade e naturalidade.',
-            mainVideo: 'assets/agenciamento/portfolio-lara-pear/Principal.mov',
+            description: 'Lara é uma criadora de conteúdo carioca apaixonada por viagens, experiências e pela liberdade de viver o mundo ao próprio ritmo. Formada em Relações Internacionais e fluente em seis idiomas, ela reúne uma comunidade sólida de mulheres independentes que valorizam autenticidade, autonomia e autocuidado. Com um estilo de vida ativo e saudável, compartilha dicas de viagem, bem-estar, moda e beleza, sempre com transparência e leveza.',
+            mainVideo: 'assets/agenciamento/portfolio-lara-pear/Principal.mp4',
             portfolio: [
                 { video: 'assets/agenciamento/portfolio-lara-pear/Cif.mp4', brand: 'Cif', logo: 'assets/agenciamento/logos-marcas/logo-cif.png' },
                 { video: 'assets/agenciamento/portfolio-lara-pear/Mantecorp.mp4', brand: 'Mantecorp', logo: 'assets/agenciamento/logos-marcas/logo-mantecorp.png' },
@@ -856,8 +856,8 @@ const influencerData = {
             name: 'Gabriela Medeiros',
             handle: '@gabrielamedeiros',
             followers: '327k',
-            description: 'Gabriela Medeiros é uma criadora de conteúdo especializada em beleza e fitness. Com sua abordagem autêntica e conhecimento técnico, ela produz conteúdos educativos que inspiram sua audiência a cuidar da saúde e bem-estar de forma equilibrada e sustentável.',
-            mainVideo: 'assets/agenciamento/portfolio-gabriela-medeiros/Principal.mov',
+            description: 'Gabriela é atriz, modelo e poetisa. Recentemente integrou o elenco do remake de Renascer na TV Globo, interpretando a personagem Buba — papel que consolidou sua presença e força artística. Com estética marcante e sensibilidade poética, Gabriela traduz conceito, autenticidade e profundidade em tudo o que cria. Seu olhar único atravessa moda, arte e narrativa, transformando cada imagem e palavra em expressão de identidade e presença.',
+            mainVideo: 'assets/agenciamento/portfolio-gabriela-medeiros/Principal.mp4',
             portfolio: [
                 { video: 'assets/agenciamento/portfolio-gabriela-medeiros/boticario.mp4', brand: 'O boticário', logo: 'assets/agenciamento/logos-marcas/logo-boticario.png' },
                 { video: 'assets/agenciamento/portfolio-gabriela-medeiros/brae.mp4', brand: 'Braé', logo: 'assets/agenciamento/logos-marcas/logo-brae.webp' },
@@ -1140,6 +1140,10 @@ const influencerData = {
         const banners = document.querySelectorAll('.banner-item');
         
         banners.forEach(banner => {
+            // Desabilitar temporariamente o clique no banner imobiliário
+            if (banner.id === 'imobiliario') {
+                return; // Pula este banner
+            };
             banner.addEventListener('click', function() {
                 const ramo = this.id;
                 if (ramo) {
@@ -1156,14 +1160,23 @@ const influencerData = {
         
         const portfolioData = getPortfolioData(ramo);
         
+        // Função auxiliar para gerar o caminho WebP
+        function getWebpPath(originalPath) {
+            // Remove a extensão original e adiciona -optimized.webp
+            return originalPath.replace(/\.(jpeg|jpg|JPG|png|PNG)$/i, '-optimized.webp');
+        }
+        
         main.innerHTML = `
             <section class="portfolio-section">
                 <div class="portfolio-container">
                     <h2 class="portfolio-title">${portfolioData.title}</h2>
                     <div class="portfolio-grid portfolio-${ramo}">
                         ${portfolioData.images.map(img => `
-                            <div class="portfolio-item">
-                                <img src="${img.src}" alt="${img.alt}" loading="lazy">
+                            <div class="portfolio-item">    
+                                <picture>
+                                    <source srcset="${getWebpPath(img.src)}" type="image/webp">
+                                    <img src="${img.src}" alt="${img.alt}" loading="lazy" decoding="async">
+                                </picture>
                             </div>
                         `).join('')}
                     </div>
@@ -1267,97 +1280,97 @@ const influencerData = {
     window.showPortfolio = showPortfolio;
     window.showMainContent = showMainContent;
     
-// ===========================
-// VIDEO PERFORMANCE OPTIMIZATION
-// ===========================
-
-// Detect device performance capabilities
-function detectDevicePerformance() {
-    const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
-    const isSlowConnection = connection && (connection.effectiveType === 'slow-2g' || connection.effectiveType === '2g');
-    const isLowEndDevice = navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 2;
+    // ===========================
+    // VIDEO PERFORMANCE OPTIMIZATION
+    // ===========================
     
-    return {
-        isSlowConnection,
-        isLowEndDevice,
-        shouldReduceAnimations: isSlowConnection || isLowEndDevice
-    };
-}
-
-// Initialize video lazy loading for portfolio
-function initializeVideoLazyLoading() {
-    const videoItems = document.querySelectorAll('.video-item');
-    
-    if ('IntersectionObserver' in window) {
-        const videoObserver = new IntersectionObserver((entries, observer) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const videoItem = entry.target;
-                    const video = videoItem.querySelector('video');
-                    
-                    if (video && !video.hasAttribute('data-loaded')) {
-                        // Mark as loaded to prevent multiple loads
-                        video.setAttribute('data-loaded', 'true');
-                        
-                        // Add loading state
-                        video.classList.add('loading');
-                        
-                        // Load video source
-                        video.load();
-                        
-                        // Play when ready
-                        video.addEventListener('canplaythrough', function() {
-                            this.classList.remove('loading');
-                            this.classList.add('loaded');
-                            this.play().catch(e => console.log('Video autoplay prevented'));
-                        });
-                        
-                        video.addEventListener('error', function() {
-                            this.classList.remove('loading');
-                            this.classList.add('error');
-                        });
-                    }
-                    
-                    // Stop observing this video item
-                    observer.unobserve(videoItem);
-                }
-            });
-        }, {
-            rootMargin: '200px 0px', // Start loading when 200px away
-            threshold: 0.1
-        });
+    // Detect device performance capabilities
+    function detectDevicePerformance() {
+        const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+        const isSlowConnection = connection && (connection.effectiveType === 'slow-2g' || connection.effectiveType === '2g');
+        const isLowEndDevice = navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 2;
         
-        // Observe all video items
-        videoItems.forEach(item => {
-            videoObserver.observe(item);
-        });
-    }
-}
-
-// Initialize optimized portfolio videos
-function initializePortfolioVideosOptimized() {
-    const performance = detectDevicePerformance();
-    
-    if (performance.shouldReduceAnimations) {
-        // Disable autoplay and animations on slow devices
-        const portfolioVideos = document.querySelectorAll('.video-item video');
-        portfolioVideos.forEach(video => {
-            video.removeAttribute('autoplay');
-            video.controls = true;
-        });
-        return;
+        return {
+            isSlowConnection,
+            isLowEndDevice,
+            shouldReduceAnimations: isSlowConnection || isLowEndDevice
+        };
     }
     
-    // Use optimized implementation for normal devices
-    initializeVideoLazyLoading();
-}
-
-// ===========================
-// LAZY LOADING OPTIMIZATION
-// ===========================
-
-// Initialize lazy loading optimization
-function initializeLazyLoading() {
+    // Initialize video lazy loading for portfolio
+    function initializeVideoLazyLoading() {
+        const videoItems = document.querySelectorAll('.video-item');
+        
+        if ('IntersectionObserver' in window) {
+            const videoObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const videoItem = entry.target;
+                        const video = videoItem.querySelector('video');
+                        
+                        if (video && !video.hasAttribute('data-loaded')) {
+                            // Mark as loaded to prevent multiple loads
+                            video.setAttribute('data-loaded', 'true');
+                            
+                            // Add loading state
+                            video.classList.add('loading');
+                            
+                            // Load video source
+                            video.load();
+                            
+                            // Play when ready
+                            video.addEventListener('canplaythrough', function() {
+                                this.classList.remove('loading');
+                                this.classList.add('loaded');
+                                this.play().catch(e => console.log('Video autoplay prevented'));
+                            });
+                            
+                            video.addEventListener('error', function() {
+                                this.classList.remove('loading');
+                                this.classList.add('error');
+                            });
+                        }
+                        
+                        // Stop observing this video item
+                        observer.unobserve(videoItem);
+                    }
+                });
+            }, {
+                rootMargin: '200px 0px', // Start loading when 200px away
+                threshold: 0.1
+            });
+            
+            // Observe all video items
+            videoItems.forEach(item => {
+                videoObserver.observe(item);
+            });
+        }
+    }
+    
+    // Initialize optimized portfolio videos
+    function initializePortfolioVideosOptimized() {
+        const performance = detectDevicePerformance();
+        
+        if (performance.shouldReduceAnimations) {
+            // Disable autoplay and animations on slow devices
+            const portfolioVideos = document.querySelectorAll('.video-item video');
+            portfolioVideos.forEach(video => {
+                video.removeAttribute('autoplay');
+                video.controls = true;
+            });
+            return;
+        }
+        
+        // Use optimized implementation for normal devices
+        initializeVideoLazyLoading();
+    }
+    
+    // ===========================
+    // LAZY LOADING OPTIMIZATION
+    // ===========================
+    
+    // Initialize lazy loading optimization
+    function initializeLazyLoading() {
         // Enhanced lazy loading for images with better performance
         const lazyImages = document.querySelectorAll('img[loading="lazy"]');
         

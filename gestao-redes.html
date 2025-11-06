@@ -15,36 +15,150 @@
       --color-hover-light: #f0f0f0;
     }
     *{margin:0;padding:0;box-sizing:border-box}
-    body{font-family:'Inter',sans-serif;line-height:1.6;color:var(--color-text-primary)}
+    html{visibility:hidden}
+    html.css-loaded{visibility:visible}
+    body{font-family:'Inter',sans-serif;line-height:1.6;color:var(--color-text-primary);background-color:var(--color-white)}
+    .container{max-width:1200px;margin:0 auto;padding:0 2rem}
     .header{position:fixed;top:0;left:0;width:100%;background:var(--color-dark-gray);z-index:1000;padding:0;height:auto;overflow:visible}
     .header.scrolled{background:var(--color-dark-gray)}
     .nav-container{max-width:1200px;margin:0 auto;padding:0 2rem;display:flex;flex-direction:column;justify-content:flex-start;align-items:center;height:80px;position:relative}
     .header-top{width:100%;max-width:1200px;display:flex;justify-content:space-between;align-items:center;padding:1rem 0;position:relative;z-index:1002}
     .logo-container{height:60px;overflow:hidden;display:flex;align-items:center}
     .logo{height:220px;width:auto;margin-top:-30px;margin-bottom:-30px}
+    section{background-color:var(--color-white);padding:4rem 0}
+    @media (max-width: 480px) {
+      .container{padding:0 1rem}
+    }
   </style>
   
- <!-- CSS Files - Carregamento otimizado com preload -->
-  <link rel="preload" href="css/styles.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-  <noscript><link rel="stylesheet" href="css/styles.css"></noscript>
-
-  <link rel="preload" href="css/header-pages.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-  <noscript><link rel="stylesheet" href="css/header-pages.css"></noscript>
-
-  <link rel="preload" href="css/page_gestao_redes.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-  <noscript><link rel="stylesheet" href="css/page_gestao_redes.css"></noscript>
-
-  <link rel="preload" href="css/index/footer.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-  <noscript><link rel="stylesheet" href="css/index/footer.css"></noscript>
-
-  <link rel="preload" href="css/animations.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-  <noscript><link rel="stylesheet" href="css/animations.css"></noscript>
-
+  <!-- CSS Essenciais - Carregamento Síncrono (Bloqueante) -->
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/header-pages.css">
+  <link rel="stylesheet" href="css/page_gestao_redes.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css">
+  
+  <!-- CSS Não Crítico - Carregamento Assíncrono -->
+  <link rel="preload" href="css/index/footer.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="css/index/footer.css"></noscript>
+  
+  <link rel="preload" href="css/animations.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="css/animations.css"></noscript>
+  
   <!-- Script para habilitar preload -->
   <script>
     !function(e){"use strict";var t=function(t,n,o){var i,r=e.document,a=r.createElement("link");if(n)i=n;else{var l=(r.body||r.getElementsByTagName("head")[0]).childNodes;i=l[l.length-1]}var d=r.styleSheets;a.rel="stylesheet",a.href=t,a.media="only x",function e(t){if(r.body)return t();setTimeout(function(){e(t)})}(function(){i.parentNode.insertBefore(a,n?i:i.nextSibling)});var f=function(e){for(var t=a.href,n=r.styleSheets,o=0;o<n.length;o++)if(n[o].href===t)return e();setTimeout(function(){f(e)})};return a.addEventListener&&a.addEventListener("load",function(){this.media=o||"all"}),a.onloadcssdefined=f,f(function(){a.media!==o&&(a.media=o||"all")}),a};"undefined"!=typeof exports?exports.loadCSS=t:e.loadCSS=t}("undefined"!=typeof global?global:this);
+  </script>
+  <!-- Script para mostrar conteúdo quando CSS carregar (versão otimizada) -->
+  <script>
+    (function() {
+        var cssLoaded = false;
+        var requiredSheets = ['styles.css', 'header-pages.css', 'page_gestao_redes.css'];
+        
+        function markAsLoaded() {
+            if (cssLoaded) return;
+            cssLoaded = true;
+            requestAnimationFrame(function() {
+                document.documentElement.classList.add('css-loaded');
+            });
+        }
+        
+        function checkCSS() {
+            if (cssLoaded) return true;
+            
+            var sheets = document.styleSheets;
+            var foundCount = 0;
+            
+            for (var i = 0; i < sheets.length; i++) {
+                try {
+                    var href = sheets[i].href || '';
+                    if (href && (sheets[i].cssRules || sheets[i].rules)) {
+                        for (var j = 0; j < requiredSheets.length; j++) {
+                            if (href.indexOf(requiredSheets[j]) !== -1) {
+                                foundCount++;
+                                break;
+                            }
+                        }
+                    }
+                } catch(e) {
+                    if (sheets[i].href) foundCount++;
+                }
+            }
+            
+            if (foundCount >= 2) {
+                markAsLoaded();
+                return true;
+            }
+            return false;
+        }
+        
+        if (checkCSS()) return;
+        
+        var links = document.querySelectorAll('link[rel="stylesheet"]');
+        var syncLinks = [];
+        var loadedCount = 0;
+        
+        for (var i = 0; i < links.length; i++) {
+            if (links[i].rel === 'stylesheet' && !links[i].hasAttribute('onload')) {
+                syncLinks.push(links[i]);
+            }
+        }
+        
+        function onLinkLoad() {
+            loadedCount++;
+            requestAnimationFrame(function() {
+                if (loadedCount >= syncLinks.length || checkCSS()) {
+                    markAsLoaded();
+                }
+            });
+        }
+        
+        for (var i = 0; i < syncLinks.length; i++) {
+            var link = syncLinks[i];
+            if (link.sheet || link.styleSheet) {
+                loadedCount++;
+            } else {
+                link.addEventListener('load', onLinkLoad);
+                link.addEventListener('error', onLinkLoad);
+            }
+        }
+        
+        if (loadedCount >= syncLinks.length) {
+            markAsLoaded();
+            return;
+        }
+        
+        var interval = setInterval(function() {
+            if (checkCSS() || cssLoaded) {
+                clearInterval(interval);
+            }
+        }, 5);
+        
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', function() {
+                requestAnimationFrame(function() {
+                    if (!cssLoaded) {
+                        markAsLoaded();
+                        clearInterval(interval);
+                    }
+                });
+            });
+        } else {
+            requestAnimationFrame(function() {
+                if (!cssLoaded) {
+                    markAsLoaded();
+                    clearInterval(interval);
+                }
+            });
+        }
+        
+        setTimeout(function() {
+            if (!cssLoaded) {
+                markAsLoaded();
+                clearInterval(interval);
+            }
+        }, 300);
+    })();
   </script>
 </head>
 <body>

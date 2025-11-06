@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Soho Agency - Strategy, Creativity & Aesthetic</title>
     
-    <!-- CSS Crítico Inline (Header e Hero) -->
+    <!-- CSS Crítico Inline (Expandido) -->
     <style>
         :root {
             --color-black: #000000;
@@ -16,7 +16,11 @@
             --color-hover-light: #f0f0f0;
         }
         *{margin:0;padding:0;box-sizing:border-box}
-        body{font-family:'Inter',sans-serif;line-height:1.6;color:var(--color-text-primary)}
+        html{visibility:hidden}
+        html.css-loaded{visibility:visible}
+        body{font-family:'Inter',sans-serif;line-height:1.6;color:var(--color-text-primary);background-color:var(--color-white)}
+        .container{max-width:1200px;margin:0 auto;padding:0 2rem}
+        section{background-color:var(--color-white);padding:4rem 0}
         .header{position:fixed;top:0;left:0;width:100%;background:transparent;z-index:1000;padding:0;height:auto;overflow:visible}
         .header.scrolled{background:var(--color-dark-gray)}
         .nav-container{max-width:1200px;margin:0 auto;padding:0 2rem;display:flex;flex-direction:column;justify-content:flex-start;align-items:center;height:80px;position:relative}
@@ -28,6 +32,9 @@
         .hero::before{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.4);z-index:1}
         .hero-content{position:relative;z-index:2;max-width:1200px;margin:0 auto;padding:0 2rem 4rem 2rem;width:100%}
         .hero-title{font-size:clamp(3rem,5vw,5.5rem);font-weight:400;color:#fff;line-height:1.1;text-transform:uppercase;letter-spacing:-.02em;max-width:600px}
+        @media (max-width: 480px) {
+            .container{padding:0 1rem}
+        }
     </style>
     
     <!-- Google Fonts - Otimizado com defer -->
@@ -36,19 +43,13 @@
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600&family=Raleway:wght@400;500;600;700&family=Tangerine:wght@400;700&family=Tenor+Sans:wght@400&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600&family=Raleway:wght@400;500;600;700&family=Tangerine:wght@400;700&family=Tenor+Sans:wght@400&display=swap" rel="stylesheet"></noscript>
     
-    <!-- CSS Files - Carregamento otimizado com preload -->
-    <link rel="preload" href="css/styles.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript><link rel="stylesheet" href="css/styles.css"></noscript>
+    <!-- CSS Essenciais - Carregamento Síncrono (Bloqueante) -->
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/index/header.css">
+    <link rel="stylesheet" href="css/index/hero.css">
+    <link rel="stylesheet" href="css/index/about.css">
     
-    <link rel="preload" href="css/index/header.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript><link rel="stylesheet" href="css/index/header.css"></noscript>
-    
-    <link rel="preload" href="css/index/hero.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript><link rel="stylesheet" href="css/index/hero.css"></noscript>
-    
-    <link rel="preload" href="css/index/about.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript><link rel="stylesheet" href="css/index/about.css"></noscript>
-    
+    <!-- CSS Não Crítico - Carregamento Assíncrono -->
     <link rel="preload" href="css/index/services.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="css/index/services.css"></noscript>
     
@@ -68,17 +69,128 @@
     <script>
         !function(e){"use strict";var t=function(t,n,o){var i,r=e.document,a=r.createElement("link");if(n)i=n;else{var l=(r.body||r.getElementsByTagName("head")[0]).childNodes;i=l[l.length-1]}var d=r.styleSheets;a.rel="stylesheet",a.href=t,a.media="only x",function e(t){if(r.body)return t();setTimeout(function(){e(t)})}(function(){i.parentNode.insertBefore(a,n?i:i.nextSibling)});var f=function(e){for(var t=a.href,n=r.styleSheets,o=0;o<n.length;o++)if(n[o].href===t)return e();setTimeout(function(){f(e)})};return a.addEventListener&&a.addEventListener("load",function(){this.media=o||"all"}),a.onloadcssdefined=f,f(function(){a.media!==o&&(a.media=o||"all")}),a};"undefined"!=typeof exports?exports.loadCSS=t:e.loadCSS=t}("undefined"!=typeof global?global:this);
     </script>
+    <!-- Script para mostrar conteúdo quando CSS carregar (versão otimizada) -->
+    <script>
+        (function() {
+            var cssLoaded = false;
+            var requiredSheets = ['styles.css', 'header.css', 'hero.css', 'about.css'];
+            
+            function markAsLoaded() {
+                if (cssLoaded) return;
+                cssLoaded = true;
+                requestAnimationFrame(function() {
+                    document.documentElement.classList.add('css-loaded');
+                });
+            }
+            
+            function checkCSS() {
+                if (cssLoaded) return true;
+                
+                var sheets = document.styleSheets;
+                var foundCount = 0;
+                
+                for (var i = 0; i < sheets.length; i++) {
+                    try {
+                        var href = sheets[i].href || '';
+                        if (href && (sheets[i].cssRules || sheets[i].rules)) {
+                            for (var j = 0; j < requiredSheets.length; j++) {
+                                if (href.indexOf(requiredSheets[j]) !== -1) {
+                                    foundCount++;
+                                    break;
+                                }
+                            }
+                        }
+                    } catch(e) {
+                        if (sheets[i].href) foundCount++;
+                    }
+                }
+                
+                if (foundCount >= 3) {
+                    markAsLoaded();
+                    return true;
+                }
+                return false;
+            }
+            
+            if (checkCSS()) return;
+            
+            var links = document.querySelectorAll('link[rel="stylesheet"]');
+            var syncLinks = [];
+            var loadedCount = 0;
+            
+            for (var i = 0; i < links.length; i++) {
+                if (links[i].rel === 'stylesheet' && !links[i].hasAttribute('onload')) {
+                    syncLinks.push(links[i]);
+                }
+            }
+            
+            function onLinkLoad() {
+                loadedCount++;
+                requestAnimationFrame(function() {
+                    if (loadedCount >= syncLinks.length || checkCSS()) {
+                        markAsLoaded();
+                    }
+                });
+            }
+            
+            for (var i = 0; i < syncLinks.length; i++) {
+                var link = syncLinks[i];
+                if (link.sheet || link.styleSheet) {
+                    loadedCount++;
+                } else {
+                    link.addEventListener('load', onLinkLoad);
+                    link.addEventListener('error', onLinkLoad);
+                }
+            }
+            
+            if (loadedCount >= syncLinks.length) {
+                markAsLoaded();
+                return;
+            }
+            
+            var interval = setInterval(function() {
+                if (checkCSS() || cssLoaded) {
+                    clearInterval(interval);
+                }
+            }, 5);
+            
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', function() {
+                    requestAnimationFrame(function() {
+                        if (!cssLoaded) {
+                            markAsLoaded();
+                            clearInterval(interval);
+                        }
+                    });
+                });
+            } else {
+                requestAnimationFrame(function() {
+                    if (!cssLoaded) {
+                        markAsLoaded();
+                        clearInterval(interval);
+                    }
+                });
+            }
+            
+            setTimeout(function() {
+                if (!cssLoaded) {
+                    markAsLoaded();
+                    clearInterval(interval);
+                }
+            }, 300);
+        })();
+    </script>
 </head>
 <body>
     <!-- Header -->
     <header class="header" id="header">
         <div class="nav-container">
             <div class="header-top">
-            <div class="logo-container">
-                <a href="index.html">
-                    <img src="assets/logo-horizontal-off-white-fundo-transparente.png" alt="Soho Agency" class="logo" loading="eager" decoding="async" width="400" height="220">
-                </a>
-            </div>
+                <div class="logo-container">
+                    <a href="index.html">
+                        <img src="assets/logo-horizontal-off-white-fundo-transparente.png" alt="Soho Agency" class="logo" loading="eager" decoding="async" width="400" height="220">
+                    </a>
+                </div>
                 
                 <div class="mobile-menu-toggle" id="mobile-menu-toggle">
                     <span></span>
@@ -104,7 +216,7 @@
             </nav>
         </div>
     </header>
-
+    
     <!-- Hero Section -->
     <section class="hero" id="home">
         <video class="hero-video" autoplay muted loop playsinline>
@@ -117,7 +229,7 @@
             <h1 class="hero-title">Strategy,<br>Creativity &<br>Aesthetic</h1>
         </div>
     </section>
-
+    
     <!-- About Section -->
     <section class="about" id="sobre">
         <div class="about-container">
@@ -159,7 +271,7 @@
             </div>
         </div>
     </section>
-
+    
     <!-- Services Section -->
     <section class="services" id="servicos">
         <div class="services-container">
@@ -228,7 +340,7 @@
             </div>
         </div>
     </section>
-
+    
     <!-- Portfolio Section -->
     <section class="portfolio" id="portfolio">
         <div class="portfolio-container">
@@ -237,80 +349,80 @@
                     <!-- Layout quebra-cabeça - 11 vídeos total -->
                     <div class="video-item">
                         <video preload="none" muted loop playsinline>
-                            <source src="assets/index-portfolio/video-6-saliss.mov" type="video/mp4">
+                            <source src="assets/index-portfolio/video-6-saliss-optimized.mp4" type="video/mp4">
                         </video>
                     </div>
                     
                     <div class="video-item">
                         <video preload="none" muted loop playsinline>
-                            <source src="assets/index-portfolio/video-12-abbout.mp4" type="video/mp4">
+                            <source src="assets/index-portfolio/video-12-abbout-optimized.mp4" type="video/mp4">
                         </video>
                     </div>
                     
                     <div class="video-item">
                         <video preload="none" muted loop playsinline>
-                            <source src="assets/index-portfolio/video-1-zeekr-rio.mp4" type="video/mp4">
+                            <source src="assets/index-portfolio/video-1-zeekr-rio-optimized.mp4" type="video/mp4">
                         </video>
                     </div>
                     
                     <div class="video-item">
                         <video preload="none" muted loop playsinline>
-                            <source src="assets/index-portfolio/video-2-stuppendo-rio.mp4" type="video/mp4">
+                            <source src="assets/index-portfolio/video-2-stuppendo-rio-optimized.mp4" type="video/mp4">
                         </video>
                     </div>
                     
                     <div class="video-item">
                         <video preload="none" muted loop playsinline>
-                            <source src="assets/index-portfolio/video-5-proart-nirvana.mp4" type="video/mp4">
+                            <source src="assets/index-portfolio/video-5-proart-nirvana-optimized.mp4" type="video/mp4">
                         </video>
                     </div>
                     
                     <div class="video-item">
                         <video preload="none" muted loop playsinline>
-                            <source src="assets/index-portfolio/video-11-future.mp4" type="video/mp4">
+                            <source src="assets/index-portfolio/video-11-future-optimized.mp4" type="video/mp4">
                         </video>
                     </div>
                     
                     <div class="video-item">
                         <video preload="none" muted loop playsinline>
-                            <source src="assets/index-portfolio/video-7-logaf.mp4" type="video/mp4">
+                            <source src="assets/index-portfolio/video-7-logaf-optimized.mp4" type="video/mp4">
                         </video>
                     </div>
                     
                     <div class="video-item">
                         <video preload="none" muted loop playsinline>
-                            <source src="assets/index-portfolio/video-8-future.mp4" type="video/mp4">
+                            <source src="assets/index-portfolio/video-8-future-optimized.mp4" type="video/mp4">
                         </video>
                     </div>
                     
                     <div class="video-item">
                         <video preload="none" muted loop playsinline>
-                            <source src="assets/index-portfolio/video-9-mabruk.mp4" type="video/mp4">
+                            <source src="assets/index-portfolio/video-9-mabruk-optimized.mp4" type="video/mp4">
                         </video>
                     </div>
                     
                     <div class="video-item">
                         <video preload="none" muted loop playsinline>
-                            <source src="assets/index-portfolio/video-10-halzi.mp4" type="video/mp4">
+                            <source src="assets/index-portfolio/video-10-halzi-optimized.mp4" type="video/mp4">
                         </video>
                     </div>
                     
                     <div class="video-item">
                         <video preload="none" muted loop playsinline>
-                            <source src="assets/index-portfolio/video-4-outlander.mp4" type="video/mp4">
+                            <source src="assets/index-portfolio/video-4-outlander-optimized.mp4" type="video/mp4">
                         </video>
                     </div>
                     
                     <div class="video-item">
                         <video preload="none" muted loop playsinline>
-                            <source src="assets/index-portfolio/video-3-stuppendo-rio.mp4" type="video/mp4">
+                            <source src="assets/index-portfolio/video-3-stuppendo-rio-optimized.mp4" type="video/mp4">
                         </video>
                     </div>
                 </div>
             </div>
         </div>
     </section>
-
+    
     <!-- Contact Section -->
     <section class="contact" id="contato">
         <div class="contact-container">
@@ -320,47 +432,47 @@
             
             <div class="contact-right">
                 <form class="contact-form" id="contact-form">
-                <div class="form-group side-by-side">
-                    <div class="input-group">
-                        <label for="name">Meu nome é</label>
-                        <input type="text" id="name" name="name" placeholder="ENTER YOUR NAME" required>
-                    </div>
-                    <div class="input-group">
-                        <label for="email">Meu e-mail é</label>
-                        <input type="email" id="email" name="email" placeholder="YOUR E-MAIL" required>
-                    </div>
-                </div>
-                
-                <div class="form-group service-group">
-                    <label for="service">estou procurando por</label>
-                    <div class="service-options">
-                        <div class="service-option">
-                            <input type="radio" id="gestao-redes" name="service" value="GESTÃO DE REDES SOCIAIS" required>
-                            <label for="gestao-redes">GESTÃO DE REDES SOCIAIS</label>
+                    <div class="form-group side-by-side">
+                        <div class="input-group">
+                            <label for="name">Meu nome é</label>
+                            <input type="text" id="name" name="name" placeholder="ENTER YOUR NAME" required>
                         </div>
-                        <div class="service-option">
-                            <input type="radio" id="producao-conteudo" name="service" value="PRODUÇÃO DE CONTEÚDO" required>
-                            <label for="producao-conteudo">PRODUÇÃO DE CONTEÚDO</label>
-                        </div>
-                        <div class="service-option">
-                            <input type="radio" id="sou-influenciadora" name="service" value="SOU INFLUENCIADORA" required>
-                            <label for="sou-influenciadora">SOU INFLUENCIADORA</label>
+                        <div class="input-group">
+                            <label for="email">Meu e-mail é</label>
+                            <input type="email" id="email" name="email" placeholder="YOUR E-MAIL" required>
                         </div>
                     </div>
-                </div>
-                
-                <div class="form-group message-group">
-                    <label for="message">Deixe uma mensagem</label>
-                    <div class="message-textarea-container">
-                        <textarea id="message" name="message" placeholder="LEAVE A MESSAGE" required></textarea>
-                        <button type="submit" class="submit-btn">ENVIAR MENSAGEM</button>
+                    
+                    <div class="form-group service-group">
+                        <label for="service">estou procurando por</label>
+                        <div class="service-options">
+                            <div class="service-option">
+                                <input type="radio" id="gestao-redes" name="service" value="GESTÃO DE REDES SOCIAIS" required>
+                                <label for="gestao-redes">GESTÃO DE REDES SOCIAIS</label>
+                            </div>
+                            <div class="service-option">
+                                <input type="radio" id="producao-conteudo" name="service" value="PRODUÇÃO DE CONTEÚDO" required>
+                                <label for="producao-conteudo">PRODUÇÃO DE CONTEÚDO</label>
+                            </div>
+                            <div class="service-option">
+                                <input type="radio" id="sou-influenciadora" name="service" value="SOU INFLUENCIADORA" required>
+                                <label for="sou-influenciadora">SOU INFLUENCIADORA</label>
+                            </div>
+                        </div>
                     </div>
-                </div>
+                    
+                    <div class="form-group message-group">
+                        <label for="message">Deixe uma mensagem</label>
+                        <div class="message-textarea-container">
+                            <textarea id="message" name="message" placeholder="LEAVE A MESSAGE" required></textarea>
+                            <button type="submit" class="submit-btn">ENVIAR MENSAGEM</button>
+                        </div>
+                    </div>
                 </form>
             </div>
         </div>
     </section>
-
+    
     <!-- Footer Section -->
     <footer class="footer" id="footer">
         <div class="footer-container">
@@ -397,7 +509,7 @@
             </div>
         </div>
     </footer>
-
+    
     <!-- EmailJS SDK -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js" defer></script>
     <script src="script.js" defer></script>
